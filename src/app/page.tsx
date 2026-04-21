@@ -51,7 +51,7 @@ export default function About() {
         </h2>
         <p className="mt-3 leading-relaxed">
           <strong>Docs is how your users (and your user&apos;s agents) learn how to use your product.</strong>{" "}
-          Often, docs can be the first look into how your users perceive the quality of your product.
+          Often, docs is the first look into how your users perceive the quality of your product.
           I firmly believe that documentation IS the product, and the best tech writers treat docs as a product itself.
         </p>
       </section>
