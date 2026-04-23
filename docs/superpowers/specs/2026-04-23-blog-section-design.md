@@ -14,7 +14,9 @@ Add a blog section to albertxu.com for publishing markdown-authored posts, start
   - `coverImage` (required): Path to cover image in `public/blog/`
   - `excerpt` (required): Short description for the listing page
   - `canonicalUrl` (optional): URL for `<link rel="canonical">` meta tag (for Medium cross-linking)
-- Build-time validation: error if any required frontmatter field is missing
+- Build-time validation: the build **fails** with a clear error (e.g., `Post 'ai-docs-audit' is missing required field: date`) if any required frontmatter field is missing or invalid
+  - `date` must be a valid `YYYY-MM-DD` string
+  - `coverImage` path must point to an existing file in `public/`
 - Reading time calculated automatically from word count
 
 ## Blog Listing Page (`/blog`)
@@ -49,7 +51,7 @@ Add a blog section to albertxu.com for publishing markdown-authored posts, start
 
 ## Navigation
 
-- Add "Blog" link to the Nav component between "About" and "Resume"
+- Add "Blog" link to the Nav component between "Projects" and "Contact"
 
 ## First Post
 
