@@ -1,0 +1,26 @@
+export const metadata = {
+  title: "LoL Paparazzi",
+  tagline:
+    "A Discord bot that tracks your friends' ranked games and progress, and lets you bet on the outcome.",
+  image: "/lol-paparazzi.png",
+  tags: ["JavaScript", "Discord.js", "PostgreSQL", "Railway"],
+  links: {
+    GitHub: "https://github.com/xu-albert/lolPaparazzi",
+  },
+};
+
+## Background
+
+Started as a way to track my friend's ranked progress in League
+of Legends. I had a simple Discord ping bot before, but I thought it
+would be more fun if the bot notified me every time my friend queued up
+for a ranked game.
+
+## What it does
+
+The bot detects when a tracked player starts a ranked game and notifies
+the server. It has a predictions feature where server members can bet on
+win/loss for live games based on match stats like champion winrates, then
+compete on a leaderboard. At midnight, it posts a daily summary with the
+day's W/L record, LP changes, and champion stats. Works for multiple
+players across multiple servers, and anyone can deploy it for free.
