@@ -16,5 +16,13 @@ export function useMDXComponents(): MDXComponents {
       }
       return <pre {...props}>{children}</pre>;
     },
+    img: ({ src, alt }) => (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src as string}
+        alt={alt}
+        className="w-full rounded-xl border border-border shadow-lg shadow-foreground/5"
+      />
+    ),
   };
 }

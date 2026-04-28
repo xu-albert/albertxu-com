@@ -1,0 +1,60 @@
+export const metadata = {
+  title: "albertxu.com",
+  tagline:
+    "This website. Migrated from Squarespace to Next.js on Vercel.",
+  image: "/albertxu-com.png",
+  tags: ["Next.js", "Tailwind", "Vercel", "Resend"],
+  links: {
+    "See this project on GitHub": "https://github.com/xu-albert/albertxu-com",
+  },
+};
+
+## Background
+
+I originally had a website on Squarespace, much like this one. I wanted a website to show my work, and mostly give potential employers or other writers in the industry a way to get to know me before they talked to me.
+
+Squarespace is pretty easy to set up, but I decided to switch to Vercel for a few reasons:
+
+* You have to pay Squarespace almost 200 dollars a year to maintain your website (not including the domain)
+* It's easier to customize certain elements and pages with `next.js` compared to fiddling with Squarespace formatting
+* I wanted to apply to Vercel and other similar companies, and I think building a website goes a little further in showing that I'm capable of using these tools and building something cool
+
+## The migration
+
+Migrating over from Squarespace was shockingly easy. I used Claude Code to handle the heavy lifting while I made some high-level decisions.
+
+My initial prompt with Claude was to ask it to go onto my existing website and copy over the content as is. There were artifacts I needed to provide, of course. For example, Claude couldn't "see" the website theming and color, so I fed screenshots in as necessary. Another example of something I needed to manually provide was PDF versions of some writing samples that I hosted on Squarespace — for some reason Claude couldn't fetch those properly.
+
+While an MCP server like Playwright could probably handle that automagically, I wanted to iterate quickly for this particular project.
+
+The hardest part of setting up the website was updating my website copy. Since the last time I did a major update to my personal website, my stance and perspective on using AI to manage and write docs has changed. I'm much more pro-AI when it comes to every step of the docs process. Ironically, however, I spent most of my time editing the AI-produced drafts of my website copy. While AI is more than capable of handling most documentation needs in corporate, I think it doesn't quite accurately capture my voice and my standards for what I'd like to present on my website. 
+
+## New pages
+
+There were some pages that I wanted in addition to the migration:
+
+* A blog section to post... blogs
+* A projects section to show off the cool stuff I've been working on
+
+While I could have shown these off on Squarespace, I wanted custom formatting. Why? Because it looks nice. And I'm in love with making my website look nice. I was through with getting those damn boxes to line up on Squarespace, then having them completely fall apart on mobile.
+
+Also, I wanted to author the content in md/mdx. This was something that I was never going to accomplish in Squarespace. (Best Squarespace can do is large, ugly text boxes.)
+
+### The blog and projects
+
+I wanted a blog that supported MDX so I could write posts in Markdown with embedded React components, similar to rich static site generators that I'm used to. One example feature is the ability to render [Mermaid](https://mermaid.js.org/) diagrams.
+
+* Mermaid diagrams are drawn programmatically, so updating them is fantastically easy
+* The diagrams adjust dynamically with screen size, unlike screenshots
+
+Claude Code with Superpowers helped a lot here. For example, Claude asked me to choose between 2 initial designs for the page layout, which streamlined my decision making. The skills and plugins were useful for deciding how the blog styling should look: prose typography, code blocks, spacing. Claude even helped with choosing ideal accessible colors (with some gentle prompting).
+
+The projects section borrows almost the exact same implementation of the blogs, keeping my website nice and consistent throughout.
+
+## How Claude helped
+
+I want to be transparent about how much of this was AI-assisted. I used Claude for most of the implementation. I described what I wanted, and Claude wrote the code. My job was making decisions: what the site should look like, what content to include, how things should be organized.
+
+While I logged into Vercel to finish deploying my website and migrating my domain, it's my understanding that Claude Code probably could've used the Vercel CLI to completely handle the deployment. Claude handled about 90% of the work — maybe I should let it handle 95%+?
+
+The entire site went from `create-next-app` to deployed in about four days. Most of that time was spent on decision-making and writing website copy (like this article!).
