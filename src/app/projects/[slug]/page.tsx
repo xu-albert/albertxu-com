@@ -72,7 +72,7 @@ export default async function ProjectPage({
         <img
           src={project.meta.image}
           alt={project.meta.title}
-          className="mt-8 w-full rounded-xl border border-border"
+          className="mt-8 w-full rounded-xl border border-border shadow-lg shadow-foreground/5"
         />
       )}
 
