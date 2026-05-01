@@ -20,8 +20,7 @@ export default function About() {
                 Hi, I&apos;m Albert.
               </h1>
               <p className="mt-5 text-lg leading-relaxed text-muted">
-                6 years making software documentation at C3 AI, AWS, and
-                EY. Currently exploring what&apos;s next.
+                6 years making software documentation at C3 AI, AWS, and EY.
               </p>
               <div className="mt-8 flex gap-4 max-sm:justify-center">
                 <a
@@ -69,7 +68,7 @@ export default function About() {
           <li className="leading-relaxed">
             <span className="font-medium">Publishing process</span> — I set up
             docs-as-code pipelines with Git, Markdown, and CI/CD. At C3 AI, I
-            created the processes and templates that powered their documentation
+            created the processes and templates that power their documentation
             pipeline.
           </li>
           <li className="leading-relaxed">
@@ -131,7 +130,7 @@ export default function About() {
 
       <section className="mt-12">
         <p className="leading-relaxed text-muted">
-          Let&apos;s connect about possible opportunities or chat about writing.
+          Let&apos;s connect about opportunities or chat about writing.
         </p>
       </section>
 
