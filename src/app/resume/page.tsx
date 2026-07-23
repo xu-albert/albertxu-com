@@ -18,7 +18,7 @@ export default function Resume() {
           <li>
             <div className="flex items-baseline justify-between">
               <h3 className="font-semibold">C3.ai</h3>
-              <span className="text-sm text-muted">2022 &ndash; 2024</span>
+              <span className="text-sm text-muted">2022 &ndash; 2025</span>
             </div>
             <p className="text-sm text-muted">Technical Writer</p>
             <p className="mt-2 leading-relaxed">
