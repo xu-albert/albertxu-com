@@ -38,9 +38,9 @@ export default async function BlogPost({
     <div className="mx-auto max-w-3xl px-6 py-16">
       <Link
         href="/blog"
-        className="text-sm font-medium uppercase tracking-widest text-muted transition-colors hover:text-foreground"
+        className="text-sm text-muted transition-colors hover:text-foreground"
       >
-        Blog
+        &larr; Blog
       </Link>
       <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
         {post.meta.title}
