@@ -1,0 +1,113 @@
+export const metadata = {
+  title: "My Job Search, Assisted by AI",
+  date: "2026-07-23",
+  coverImage: "/blog/job-search-cover.svg",
+  excerpt:
+    "How I used AI to run my spring-and-summer job search — the volume it unlocked, the base rate it couldn't beat, and what I learned about working with AI along the way.",
+};
+
+import JobSearchTimeline from "@/components/JobSearchTimeline";
+import JobSearchFunnel from "@/components/JobSearchFunnel";
+import RepoCard from "@/components/RepoCard";
+
+I ran the most focused job search of my career this spring and summer, with AI doing a lot of the grunt work. Instead of guessing how it was going, I tracked every application: when it went out, how far it got, and how it ended. The job market right now is hard — that's the starting condition, not a complaint. So before I get to the AI, let me show you the receipts.
+
+Here it is as a timeline. Each line is one of the applications that got a reply, with a dot for every round and a label for how far it went and how it ended. Underneath, every application I sent, stacked by the week.
+
+<JobSearchTimeline showIntro={false} />
+
+And the same search as a funnel — where everyone dropped out:
+
+<JobSearchFunnel />
+
+Sit with the shape of that for a second. I sent 115 applications. Around a dozen got any reply at all. Roughly 90% of the time, I applied into silence.
+
+That's not a knock on the roles or the effort — it's the base rate of applying cold through a portal, and it's worth internalizing before it starts feeling personal. Two things jump out when you see it all at once: most applications go nowhere, and how an application *started* mattered far more than how many I sent. The ones that began with a warm intro — a referral, or a recruiter reaching out — reached a human at roughly twice the rate of a cold portal application. Hold onto both. They're the frame for everything below.
+
+AI changed how I ran this search — the speed, the targeting, and honestly how much less it wore me down — without changing the one number you'd most expect it to. I'll get to that number; it's the honest part. First, why I reached for the tooling at all.
+
+## Why AI, and finding the tool
+
+The thing that pushed me toward automation wasn't laziness. It was freshness. Applying while a posting is still new — being among the first few applicants — measurably helps. Postings get buried, req counts fill up, and a résumé that lands in the first day reads differently than one that lands in week three. Speed is a real edge, and speed is exactly the kind of thing software is good at.
+
+I found the tool I ended up using — [career-ops](https://github.com/santifer/career-ops), an open-source AI job-search system built by santifer — through people talking about it on TikTok and LinkedIn. It's a command-line setup that evaluates job descriptions, generates tailored CVs, tracks applications, and scans job boards.
+
+<RepoCard />
+
+Early on I was still hand-editing every résumé, and I was spending *way* too long doing it — agonizing over which bullet to cut to keep it to one page, rewording the same line five times. AI made the tailoring tractable. It helped me figure out what to actually keep from my experience for a given role, and trimmed each CV down to a single page without me staring at it for an hour. That alone would have been worth it. But the targeting turned out to matter more than the formatting.
+
+## Where it earned its keep — targeting and memory
+
+The quietly valuable part was everything I *didn't* have to do:
+
+- **It screened out bad-fit roles before I wasted time reading them.** A lot of jobs titled "content engineer" or "technical content writer" are quietly *marketing* roles — content-marketing work I could technically do but have no track record in, and would get filtered out of at the résumé or hiring-manager stage. Having AI flag those up front meant I spent my reading time on roles where I actually had a shot.
+- **It gave me a quick read on company and team culture before I invested.** A pass over reviews, recent news, and the way a job post itself was written was a useful heads-up on what I'd be walking into. It was rarely the dealbreaker — it didn't usually decide whether I applied — but going in with eyes open beat going in blind.
+- **It was a second brain across a search long enough that I lost track of things.** It caught duplicate roles I'd forgotten I'd already applied to, remembered roles I'd already evaluated and scored, and reminded me when a company was still inside a cooldown period from a previous rejection. None of it glamorous, and all of it stuff I'd have gotten wrong on my own by month three.
+- **It made tracking something other than a source of dread.** Before this, I kept a manual Google Sheet. It got tedious to maintain and — worse — demoralizing to look at, a growing column of rejections and non-responses staring back every time I opened it. The tool logged the real work I was putting in without that emotional tax.
+
+It turns out "how do I keep going" is also a problem software can help with — just not in the way I expected.
+
+## Adapting an engineer's tool to a writer's search
+
+career-ops was written primarily for AI and software-engineering job hunts. Out of the box, its candidate archetypes were things like "LLMOps Engineer" and "AI Forward Deployed Engineer" — not exactly my lane as a technical writer.
+
+So I re-pointed the whole thing at technical-writing, DevRel, and content roles. The satisfying part: I did it by editing two plain-English markdown files. No code. The tool was deliberately built with a "user layer" — your personalization lives in files that survive updates — so making it mine was a matter of describing who I am and what I'm targeting, not forking anything.
+
+I also ended up correcting the tool's own analytics, which taught me more than the retargeting did. Its scripts were counting an application that reached a screen and *then* got rejected as a "non-advance" — which quietly produced a "this channel is dead" conclusion about a channel that was actually working. I rewrote the rule to measure the furthest stage a role *ever* reached, and to bucket results by how I found the job rather than by which ATS vendor processed it. Same data, completely different — and more honest — story.
+
+And I had to redefine what "scanning for jobs" even meant, because the automated scanner structurally couldn't reach my single highest-yield source. The best roles didn't come through job boards at all — they came through the Write the Docs community Slack #jobs channel and my own LinkedIn saved searches. No API was going to hand me those. So "scan" became a three-legged thing: the automated portal scan, plus web search, plus me manually checking the places that actually convert.
+
+The transferable lesson had nothing to do with any single prompt:
+
+- The reusable skill was **shaping a general tool to a specific reality** — the value was in the customization, not the defaults.
+- **Distrust a metric until you understand how it's computed.** A number that says "give up on this channel" is worth exactly as much as the rule behind it.
+- **Know where a tool's reach ends.** The automation couldn't touch my best source, so my job was to notice that and cover the gap myself.
+
+Those are AI skills, even though none of them are about writing a clever prompt. But all of it was still *customization* — reshaping what was already in the box. The piece I'm proudest of, I built from nothing.
+
+## The hiring-manager persona review
+
+Before I submit an application, I have the system run a review that role-plays my actual reader — the single most useful thing I added to the tool. Concretely, it:
+
+- **Researches the specific person likely to screen my résumé** — pulling from LinkedIn, team pages, and whatever ATS metadata is available — so the review is grounded in a real human, not a generic "hiring manager."
+- **Spins up a separate AI agent that plays that person**, briefed with the job description and my real experience, and told to read my résumé the way that manager actually would.
+- **Returns a bullet-by-bullet verdict** — keep, cut, or rewrite — plus an overall read on whether I land at the right seniority for the role.
+- **Hands it back to me for the final call** before anything regenerates the PDF.
+
+Two design choices are doing the real work here. The first is that it's *adversarial*. The agent isn't there to cheer me on — it's briefed to argue against my résumé the way a skeptical reader would, to find the line a busy manager would roll their eyes at. You learn a lot more from the reader who's looking for a reason to pass.
+
+The second is the anti-fabrication fence. The persona is allowed to cut a bullet or rewrite one, but it is explicitly instructed never to push me toward inventing experience I don't have. And it can't submit anything — there's a mandatory stop where a human (me) makes the final decision. That guardrail isn't decoration. The whole failure mode of AI-assisted job hunting is that it'll happily help you overclaim, and an adversarial reviewer with no fence is exactly the thing that would talk you into it.
+
+If I'm honest, this is just a content professional's two oldest instincts — *know your reader* and *never overclaim* — encoded as an agent workflow. It's the same idea I keep landing on: AI proposes, you refine. The agent makes the argument. I own the call.
+
+## Prepping for interviews
+
+The prep loop was the same persona trick I used on my résumé, just pointed at a different target. For each interview I'd build the interviewer as a persona — populated from their LinkedIn, their personal site, whatever was public — and have the AI generate a question bank or a practice exercise scoped to whatever the recruiter had told me the round would cover. The recruiter's notes were gold here: the more specific they were about the format, the sharper the prep. Everything went into the brief.
+
+Then I'd actually run the mock, and that was the part I'd underestimated. Reading a list of likely questions is not the same as being asked them and having to answer out loud, in order, without stalling. The mock put me in something close to the real environment — the right headspace, the pressure of responding in the moment — and that mattered more than any specific question. One round stands out: prepping for a hiring-manager interview I badly wanted, the AI mock anticipated essentially every question that actually came up. Walking in having already said my answers out loud once, to a facsimile of the person across the table, is a completely different feeling than walking in cold.
+
+But a mock is only as good as its inputs, and I want to be honest about the ceiling. When the recruiter's notes were vague or slightly off, the prep was too, and the real conversation went somewhere I hadn't rehearsed. That's the trap of over-preparing: if you walk in clutching a set of scripted answers, you freeze the moment the interview turns — and interviews always turn. The thing actually being tested is whether you can think on your feet and be a human in the room, and no mock replaces that; at best it clears enough mental overhead that you're free to be present. The AI wasn't uniformly good, either — the "questions for the interviewer" it generated were reliably generic and forgettable. Those I always had to write myself.
+
+## What actually changed, and what didn't
+
+Time to be precise about what AI bought me, because there's exactly one number that moved and I don't want to oversell it.
+
+The win was velocity — specifically *sustained* velocity. With the tool, I held about **7 applications a week for four straight months**, April through July. My previous best sustained pace was around **3.45 a week**, and my long-run average was closer to **2.34**. So call it roughly double my best and triple my average. You can see it in the weekly bars up top — steady, week over week, instead of a couple of frantic spikes.
+
+But the multiple isn't the real story. The cadence is. Before the tool, my high-tempo stretches were spikes — I'd grind out a big week, burn out, and crash for two. The tool let me hold a steady pace for *months* without the spike-and-crash. That's the part that mattered, and it's a burnout-management win as much as a productivity one.
+
+Here's what did **not** change: my callback rate. My cold-application reach-a-human rate stayed flat — somewhere around 12–14%, same as before. AI did not make my applications land better. It's a wash on accuracy. The honest framing is *more shots on goal at the same accuracy*, not better aim. If I'd told you AI improved my hit rate, I'd be doing exactly the thing my own persona reviewer is built to stop.
+
+A couple of caveats, lightly: the search is still in flight, so plenty of these applications are unresolved and the picture could shift. And my pre-tool numbers are reconstructed from old email, which — if anything — probably flatters the past. So treat the comparison as directional, not exact.
+
+## The honest close
+
+So did AI crack the job market for me? No. It changed how I spent my energy against it.
+
+The reach still came from the human parts. The applications that got anywhere started with warm intros, not volume — the funnel says that plainly. Over the last two years I've reached final rounds at more than a dozen companies and been rejected anyway. When you get that far that often and still don't land it, it stops being a skill problem. The market is just hard right now, and no amount of tooling changes that.
+
+What AI actually gave me was a better way to keep swinging: more attempts at the same odds, a fraction of the time spent on each, and — maybe most important — no burnout spiral to knock me out for weeks at a stretch. It accelerated the work. It never once owned the judgment. That part was always mine.
+
+{/* TODO: closing success beat — pending YouTube outcome. If it lands, end on it; if not, end on "the search is ongoing, here's what I'd carry forward." */}
+
+_Companies are anonymized and roles are generalized into families. Onsite and final rounds are counted as one stage. Pre-tool figures are reconstructed from old email. The search is ongoing._
