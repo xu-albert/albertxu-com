@@ -5,6 +5,8 @@
   --foreground: #2b2522;
   --muted: #6b6058;
   --border: #ddd3c7;
+  --accent: #b5613f;
+  --accent-soft: rgba(181, 97, 63, 0.12);
 }
 
 @theme inline {
@@ -12,6 +14,8 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -74,6 +78,11 @@ body {
 
 .prose img {
   border-radius: 0.75rem;
+}
+
+/* Offset anchor jumps so headings clear the sticky nav / top edge */
+.prose :is(h2, h3) {
+  scroll-margin-top: 6rem;
 }
 
 .prose a {
