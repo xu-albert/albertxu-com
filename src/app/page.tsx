@@ -20,7 +20,7 @@ export default function About() {
                 Hi, I&apos;m Albert.
               </h1>
               <p className="mt-5 text-lg leading-relaxed text-muted">
-                6 years making software documentation at C3 AI, AWS, and EY.
+                Experience writing software docs at C3 AI, AWS, and EY.
               </p>
               <div className="mt-8 flex gap-4 max-sm:justify-center">
                 <a

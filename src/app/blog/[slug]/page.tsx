@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPost, getSlugs } from "@/lib/blog";
+import TableOfContents from "@/components/TableOfContents";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -35,12 +36,13 @@ export default async function BlogPost({
   const { default: Content } = await import(`@content/blog/${slug}.mdx`);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
+    <div className="relative mx-auto max-w-3xl px-6 py-16">
+      <TableOfContents />
       <Link
         href="/blog"
-        className="text-sm font-medium uppercase tracking-widest text-muted transition-colors hover:text-foreground"
+        className="text-sm text-muted transition-colors hover:text-foreground"
       >
-        Blog
+        &larr; Blog
       </Link>
       <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
         {post.meta.title}
