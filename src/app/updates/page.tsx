@@ -39,8 +39,8 @@ const changelog: Month[] = [
       {
         text: "Added a What's new section to the home page",
         details: [
-          "Surfaces the two most recent things I've published, as cards",
-          "Added this Site updates page, linked from the footer",
+          "Surfaces the two most recent things I've published as cards",
+          "Added this Site updates page linked from the footer",
         ],
       },
       {
@@ -64,6 +64,16 @@ const changelog: Month[] = [
   {
     month: "April 2026",
     changes: [
+      { text: "Added Vercel Web Analytics" },
+      {
+        text: (
+          <>
+            Published a case study on{" "}
+            <A href="/projects/albertxu-com">this site&apos;s rebuild</A>
+          </>
+        ),
+      },
+      { text: "Converted project pages to MDX" },
       {
         text: (
           <>
@@ -76,15 +86,11 @@ const changelog: Month[] = [
         details: ["Added Mermaid diagram rendering and reading-time estimates"],
       },
       {
-        text: (
-          <>
-            Published a case study on{" "}
-            <A href="/projects/albertxu-com">this site&apos;s rebuild</A>
-          </>
-        ),
+        text: "Launched site! 🎉",
+        details: [
+          "Rebuilt from scratch in Next.js and Tailwind, deployed on Vercel",
+        ],
       },
-      { text: "Converted project pages to MDX" },
-      { text: "Added Vercel Web Analytics" },
     ],
   },
 ];
