@@ -11,7 +11,7 @@ export default function Footer() {
             href="/updates"
             className="hover:text-foreground transition-colors"
           >
-            Updates
+            Site updates
           </Link>
         </span>
         <div className="flex gap-4">

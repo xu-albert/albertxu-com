@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Updates",
+  title: "Site updates",
 };
 
 interface Change {
@@ -85,8 +85,8 @@ const changelog: Month[] = [
 export default function Updates() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-3xl font-bold tracking-tight">Updates</h1>
-      <p className="mt-2 text-muted">What I&apos;ve changed on this site.</p>
+      <h1 className="text-3xl font-bold tracking-tight">Site updates</h1>
+      <p className="mt-2 text-muted">A running changelog, newest first.</p>
 
       <div className="mt-10 space-y-10">
         {changelog.map((entry) => (
