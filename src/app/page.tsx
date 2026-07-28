@@ -1,3 +1,5 @@
+import WhatsNew from "@/components/WhatsNew";
+
 export default function About() {
   return (
     <div>
@@ -44,7 +46,9 @@ export default function About() {
       {/* Content */}
       <div className="mx-auto max-w-3xl px-6 pb-16">
 
-      <section className="animate-fade-up delay-2 mt-14">
+      <WhatsNew />
+
+      <section className="animate-fade-up delay-3 mt-14">
         <h2 className="text-xl font-semibold">
           Documentation is an extension of the product.
         </h2>

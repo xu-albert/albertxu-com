@@ -1,8 +1,19 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4 text-sm text-muted">
-        <span>&copy; {new Date().getFullYear()} Albert Xu</span>
+        <span>
+          &copy; {new Date().getFullYear()} Albert Xu
+          <span className="px-2 text-border">&middot;</span>
+          <Link
+            href="/updates"
+            className="hover:text-foreground transition-colors"
+          >
+            Updates
+          </Link>
+        </span>
         <div className="flex gap-4">
           <a
             href="https://linkedin.com/in/albertwxu"
