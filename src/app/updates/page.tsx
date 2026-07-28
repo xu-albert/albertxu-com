@@ -29,12 +29,20 @@ interface Month {
   changes: Change[];
 }
 
-// Newest first. This is a changelog for the site itself — publishing a post or
-// case study counts, shipping an app that lives elsewhere doesn't.
+// Newest first, both across months and within each month. This is a changelog
+// for the site itself — publishing a post or case study counts, shipping an app
+// that lives elsewhere doesn't.
 const changelog: Month[] = [
   {
     month: "July 2026",
     changes: [
+      {
+        text: "Added a What's new section to the home page",
+        details: [
+          "Surfaces the two most recent things I've published, as cards",
+          "Added this Site updates page, linked from the footer",
+        ],
+      },
       {
         text: "Added a scroll-tracking table of contents to articles",
         details: ["Highlights the section you're currently reading"],
@@ -50,7 +58,6 @@ const changelog: Month[] = [
           'Added a build timeline graphic and a "What\'s next" section',
         ],
       },
-      { text: "Added a What's new section to the home page, and this changelog" },
       { text: "Added a back arrow to blog post links" },
     ],
   },
