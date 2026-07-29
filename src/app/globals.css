@@ -85,6 +85,19 @@ body {
   scroll-margin-top: 6rem;
 }
 
+/* Blockquotes are used as asides, not quotations — drop the curly quotes the
+   typography plugin wraps them in, and the italics, which don't survive a
+   paragraph of length. */
+.prose blockquote {
+  font-style: normal;
+  border-left-color: var(--accent);
+}
+
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after {
+  content: none;
+}
+
 .prose a {
   text-decoration-line: underline;
   text-underline-offset: 2px;

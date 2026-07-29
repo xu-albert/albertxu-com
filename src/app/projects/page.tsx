@@ -21,6 +21,14 @@ const projects = [
     tags: ["Flutter", "Dart", "Firebase"],
   },
   {
+    slug: "gonna-rain",
+    title: "Gonna Rain?",
+    tagline:
+      "Minute-by-minute rain alerts for iOS, live on the App Store.",
+    image: "/gonna-rain.png",
+    tags: ["Swift", "SwiftUI", "WeatherKit", "Cloudflare Workers"],
+  },
+  {
     slug: "lol-paparazzi",
     title: "LoL Paparazzi",
     tagline:
