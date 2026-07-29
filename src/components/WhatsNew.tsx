@@ -17,10 +17,10 @@ const highlights: Highlight[] = [
   {
     kind: "Case study",
     date: "July 2026",
-    title: "Potter Journal",
-    description: "A photo-first pottery tracker, shipped to the App Store.",
-    href: "/projects/potter-journal",
-    image: "/potter-journal.png",
+    title: "Gonna Rain?",
+    description: "Minute-by-minute rain alerts, and the rejection that stalled them.",
+    href: "/projects/gonna-rain",
+    image: "/gonna-rain.png",
   },
   {
     kind: "Blog",
