@@ -14,15 +14,13 @@ import Figure from "@/components/Figure";
 
 ## Background
 
-Most weather apps answer a question I don't have. "40% chance of rain today" is useless when I'm deciding whether to walk somewhere in the next twenty minutes.
+Even on rainy days, there are moments when the rain lets up for half an hour, and that's enough time to walk the dog quickly when otherwise you might not get the chance to. Granular weather updates are already available in my area through the native iOS weather app, but I wanted more active notifications to announce when exactly rain would stop, instead of having me obsessively check my phone every 10 minutes.
 
-Apple's WeatherKit exposes a minute-by-minute precipitation forecast for the next hour, and it's good. It's just buried — you have to open an app and read a chart to find it. What I wanted was for my phone to tap me on the shoulder and say *rain in about 20 minutes, lasting roughly 40*, without me asking.
-
-So the whole app is one question, and the name is the question: Gonna Rain?
+Luckily, the same weather data is available in Apple's WeatherKit. All I had to do was make a nice looking application that served the notifications that I wanted.
 
 ## What it does
 
-It shows you the next hour minute-by-minute, the next twelve hours, and the week — then gets out of the way. The background is the weather: it darkens when it rains, goes navy and speckled when it snows.
+`Gonna Rain?` shows you the next hour minute-by-minute, the next twelve hours, and the week — then gets out of the way. The background is the weather: it darkens when it rains, goes navy and speckled when it snows.
 
 The part that matters is the notifications. It tells you when rain is about to start, and when it's about to stop, and it does that whether or not the app is open, because a server is watching the forecast for your location on a ten-minute cron.
 
