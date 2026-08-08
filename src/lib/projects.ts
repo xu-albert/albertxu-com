@@ -6,7 +6,7 @@ export interface ProjectMeta {
   tagline: string;
   image?: string;
   tags: string[];
-  links: Record<string, string>;
+  links?: Record<string, string>;
 }
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "projects");
