@@ -1,0 +1,375 @@
+export const metadata = {
+  title: "Designing a Logo That Draws Itself",
+  date: "2026-08-09",
+  coverImage: "/blog/potter-logo/01-gooseneck.png",
+  excerpt:
+    "Potter Journal's splash mark took twenty-eight design rounds. The whole thing was shaped by one limitation: Flutter can't draw a line that changes thickness.",
+};
+
+import Figure from "@/components/Figure";
+
+TK the title is a placeholder — other options: "Twenty-eight rounds for one vase", "How I picked the Potter Journal logo", "A logo with no pressure".
+
+[Potter Journal](/projects/potter-journal) shipped in February with a placeholder splash screen: a lightbulb outline, left over from a template, sitting on a cream background for a second while the app booted. It was never meant to survive. In July I finally replaced it.
+
+What I wanted was specific. The mark should **draw itself on** as the app opens, like someone sketching it in front of you, and the same shape should become the app icon so the two can't drift apart. Visually: keep the gooseneck vase from the old icon, make it a simple hand-drawn silhouette, HEYTEA-inspired.
+
+TK why HEYTEA? Worth a sentence or two here — what about their marks you were going for. Same for "why a bud vase specifically" further down.
+
+That took twenty-eight rounds. Every round is archived as an HTML page plus a screenshot, which is the only reason I can write this at all.
+
+## The one thing I couldn't have
+
+Before any of the drawing, there was a constraint I didn't see coming.
+
+**Flutter's canvas cannot stroke a path with varying width.** `drawPath` with a stroke paint gives you one uniform thickness for the whole line. That sounds like a small thing until you think about what makes a drawn line look drawn: pressure. The stroke swells where the pen presses and thins where it lifts. That's the entire visual signature of ink, and it was simply not available.
+
+So every bit of "hand-drawn" had to come from geometry instead — the shape of the silhouette, a rim that isn't level, a foot that isn't symmetric, a deliberate gap where the stroke opens and closes. That constraint is the spine of everything below. Most of the rounds are, in one way or another, about buying back with shape what I couldn't buy with pressure.
+
+## Round 1: they were light bulbs
+
+Four gooseneck silhouettes, each a single open path, with the mouth gap doubling as the pen-lift.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/01-gooseneck.png",
+      caption:
+        "Four gooseneck silhouettes at splash size, and the same marks at home-screen icon size underneath. Every round was rendered at both sizes.",
+    },
+  ]}
+/>
+
+They read as light bulbs. Which is funny, because a light bulb is exactly what I was replacing.
+
+The reason is legible in hindsight: no foot and no lip flare. The body curved into a round bottom like a balloon, and the two neck lines ran parallel all the way to the top like antennae. Nothing in the drawing said "this object sits on a table."
+
+## A foot is what makes it a vase
+
+Round 2 added a flared lip and a wider base, but the "flat" base was still built from cubic curves that rounded off at the corners, so it stayed balloon-ish. Round 3 replaced those cubics with an actual straight segment and made the foot visibly narrower than the belly.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/03-flat-foot.png",
+      caption:
+        "Round 3 — a straight base segment and a foot narrower than the belly. This is where they start reading as vessels.",
+    },
+  ]}
+/>
+
+That's the whole fix. A rounded bottom says balloon; a foot says vessel. Two control points.
+
+## The rim ellipse
+
+The best single idea in the process wasn't mine — I asked for a crooked ellipse at the mouth, and it turned a flat outline into a vessel with an opening.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/04-rim-ellipse.png",
+      caption:
+        "Round 4 — four treatments of the rim: ellipse only, wider tilted ellipse, rim plus a foot arc, and rim plus an inner highlight.",
+    },
+  ]}
+/>
+
+TK worth confirming: my memory of the archive is that the rim ellipse came from you, not the agent. Correct that if it's backwards.
+
+It also cost something. The mark went from one continuous path to **three subpaths** — rim, body, footring — and that quietly invalidated a pile of assumptions in the implementation plan, which had been written around tracing a single stroke. It comes back to bite in the animation section.
+
+There was drift too. Chasing the 3D cue pushed the lip flare down and shortened the neck, so these read closer to bottles than to the gooseneck I'd asked for.
+
+## You can't walk around a vase
+
+Round 5 came from a note I gave: make it look like it's "viewed from up top and to the side."
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/05-viewpoint.png",
+      caption:
+        "Round 5 — four readings of one ambiguous instruction. 2 and 3 tilt the vase itself, which is the only way 'to the side' means anything.",
+    },
+  ]}
+/>
+
+Half of that instruction is a no-op. **A vase is rotationally symmetric**, so orbiting it horizontally changes nothing — move to the side of a bud vase and you get an identical silhouette. Only raising your eye level (which opens the rim ellipse) or tilting the vase itself changes what you see.
+
+Naming that saved a round. What it produced instead was a new problem: rotating the whole vase tilted its *straight* base along with it, so the mark read as **falling over**. A straight line, tilted, implies tilted ground. Round 6 fixed it by keeping the lean and curving the foot — a curved base has no implied ground line, so the lean reads as the vase leaning rather than the world tipping.
+
+## One photo collapsed six rounds
+
+Six rounds in, I gave up describing what I wanted and sent a photo of a Ming **yuhuchunping** — a pear-shaped bud vase. It isn't in the archive (it's someone else's photograph), but it made the target unambiguous in a way that no amount of prose had: trumpet lip flaring sharply, neck narrowest near the top and widening all the way down, widest point about two-thirds down, a distinct raised footring.
+
+TK where did the reference come from, and why this form? "Ming pear-shaped bud vase" is what the archive records, but not why you wanted it.
+
+Round 7 redrew to that reference, and it was immediately closer than anything before it.
+
+## The fix that removed the feature
+
+Round 7 had a flaw: the transition from body to foot made a squared notch that read as a drawing error on three of the four variants. On `7-2` it worked, because a footring line explained the step as intentional. I picked `7-2`.
+
+Round 8 smoothed the notch away into continuous curvature. That was a mistake, and I only saw it because I asked for both rounds on one page.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/07-vs-08-foot.png",
+      caption:
+        "Round 8b — round 7 (notched foot) above, round 8 (smoothed foot) below. Neither round on its own made the problem obvious.",
+    },
+  ]}
+/>
+
+The Ming form *has* a raised footring. Smoothing it removed it, and the round 8 vases now rest directly on their own belly — a different, less accurate object. The notch was bad execution of a good idea, not a bad idea.
+
+Seeing them together is what exposed it. Reviewing them one after the other had not.
+
+## Zoom in on the foot
+
+Round 9 tried three refined footrings against `7-2` as a control, and included a 2× detail crop of just the foot.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/09-footring.png",
+      caption:
+        "Round 9 — three footring treatments against 7-2, with a 2× crop of the foot underneath and the same marks at 60pt at the bottom.",
+    },
+  ]}
+/>
+
+The crop was the decisive view. At 2× you can see that `7-2`'s footring line converges with its base toward the ends, so the foot tapers to a wedge instead of holding an even band. Variant `A` fixed exactly that.
+
+I kept `7-2` anyway. The wedge doesn't register at the size anyone will ever see this.
+
+## The footring sets the stroke weight
+
+With the shape locked, rounds 10 and 11 crossed stroke weights against near-black shades, at splash size and at 60pt icon size.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/11-weight-and-shade.png",
+      caption:
+        "Round 11 — weights 3.0 to 4.8 in 0.3 steps, seven interpolated shades from #3C3C3C to #1A1A1A, and the icon-size row where the same weights scale up 1.55×.",
+    },
+  ]}
+/>
+
+The interesting result is *which* part of the drawing decides. The footring is the narrowest gap in the whole mark, so it clogs first: at splash size it starts filling in around 6.0, and at icon size — where everything scales up 1.55× for small-size legibility — it's nearly shut by 7.0. A decorative detail line, added three rounds earlier to explain a notch, ended up capping the stroke weight of the entire logo at both sizes. Nothing about the neck or the body would ever have been that tight.
+
+Final: **stroke 3.6, `#313131`**, on cream `#EDE5DA`.
+
+## Approving a design is not the same as shipping it
+
+The shape was locked, ported to Dart, and rendered on device 20% too wide.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/12-aspect-distortion.png",
+      caption:
+        "Round 12 — approved (left), what Flutter was actually rendering (middle), overlaid (right). Terracotta is the approved shape. The stretch reads hardest in the neck.",
+    },
+  ]}
+/>
+
+The design space is 100×120 — a 5:6 ratio. The porting instructions scaled the axes independently (`sx = width/100`, `sy = height/120`) while the widget passed a *square* box, so at `Size(120, 120)` the x axis scaled by 1.2 and the y by 1.0. Measured bounds aspect: **0.699** against the approved **0.582**. Every preview I'd approved came from an SVG `viewBox="0 0 100 120"`, which preserves the ratio. The Dart port silently did not.
+
+Two things about this bother me more than the bug:
+
+- **The golden test couldn't catch it.** A golden captures whatever the code produces, so it locked in the wrong shape just as happily as the right one and would have passed forever after.
+- **The code review didn't catch it either.** It flagged that the vertical-centering term was always exactly zero and graded that Minor. That dead term was a *symptom* of the same broken formula — but the review stopped at the arithmetic without asking what the shape actually came out looking like.
+
+What found it was measuring the rendered bounds and comparing them against the design's ratio. The fix scales by `min(w/100, h/120)` and centres on both axes, so the mark letterboxes into any box and no caller can distort it:
+
+```dart
+Path buildVasePath(Size size) {
+  // One factor for both axes: the 5:6 design space must not stretch to fit a
+  // square box. The offsets letterbox the mark inside whatever size is given.
+  final s = math.min(size.width / 100, size.height / 120);
+  final ox = (size.width - 100 * s) / 2;
+  final oy = (size.height - 120 * s) / 2;
+
+  double x(double v) => v * s + ox;
+  double y(double v) => v * s + oy;
+  ...
+```
+
+That function is the source of truth for the shape. The splash animation traces it, and the app icon is generated by rendering it — there's no exported PNG that can fall out of date, because the icon and the animation are literally the same path.
+
+## An icon is not a drawing
+
+Once the mark was in code, the generated `icon.png` had to be judged as an icon rather than as a picture of a vase.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/13-icon-real-sizes.png",
+      caption:
+        "Round 13 — the generated icon at the five sizes iOS actually uses. At 1024 the stroke looked far too heavy; at 40px it still reads.",
+    },
+  ]}
+/>
+
+Viewed at 1024 the stroke looks clumsy. At the sizes iOS actually displays it — 180, 120, 80, 60, 40 — it reads cleanly all the way down. **Judging a mark at its authoring size tells you almost nothing about how it ships.**
+
+Round 14 asked a different question: how much of the tile should the vase fill?
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/14-icon-in-tile.png",
+      caption:
+        "Round 14 — 61%, 66%, 72% and 78% of the tile, at four tile sizes. 61% (the first value the generator happened to use) reads timid; 78% crowds the rounded corners.",
+    },
+  ]}
+/>
+
+**72%** — `markSize` 740 of 1024. 61% was just the number the generator started with, and beside denser home-screen icons it looks apologetic.
+
+## Cream, on a home screen, is just white
+
+Everything above was judged against cream `#EDE5DA`, which is the app's own background and looks right in the app. On a real home screen, surrounded by saturated app icons, it stops looking like warm ceramic and starts looking like a white square with a drawing on it.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/16-icon-ground.png",
+      caption:
+        "Round 16 — the icon between fake neighbours at 96px. The original cream is on top. This is the view that made the problem obvious; eight grounds rendered in isolation had not.",
+    },
+  ]}
+/>
+
+**`#E3D3BD` was chosen.** Past roughly `#CFB490` the tile drifts from ceramic toward khaki and starts competing with the mark instead of supporting it.
+
+Round 17 tried a warmer ink (`#2E241C`) on that ground to match. It's real at 180px and essentially invisible at 60px, so the neutral `#313131` stayed — one ink shared by the icon and the splash.
+
+The ground change is **icon-only**. In-app surfaces stay cream. The colour shift happens during the icon-zoom launch transition, where it reads as the app opening rather than as an inconsistency.
+
+## Making it draw itself
+
+First device build. Three complaints, all mine, all in one sitting: the animation drew "from both sides", it felt slow, and it cut too abruptly into the app.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/15-drawon-first.png",
+      caption:
+        "Round 15 — the opening frames of the first working draw-on, captured on the iPhone 16 Pro simulator at 20fps. Three marks appear in three different places at once, which is complaint number one.",
+    },
+  ]}
+/>
+
+"From both sides" was easy: the rim ellipse started near the right lip at the same moment the body started at the left. Sequence the subpaths and it goes away.
+
+The second complaint was that the neck looked like it got **drawn twice**, and that one turned out to be structural. The body is one continuous outline, so tracing it travels down the left side, across the base, and back up the right. The vase's neck is two nearly-parallel lines — and they sit at *opposite ends* of the timeline, roughly 600ms apart. At speed, the second one reads as the first being redrawn.
+
+No amount of re-timing a single travelling stroke fixes that. It's inherent to tracing a silhouette. What fixes it is splitting the body into its two profiles and growing them **together**, so paired features appear at the same moment. Round 19's variant J rises from the base to the lip, which also happens to be the right metaphor for a pottery app — it reads as a vessel being pulled up on a wheel.
+
+TK did the "pulled up on a wheel" reading actually land for you, or is that the agent's framing? It's in the round notes but I don't know if you agreed.
+
+Round 20 re-rooted the rim ellipse from its rightmost point `(64, 9.8)` to its **leftmost** `(36, 9.9)` — the same point where the body begins — so both strokes leave one place and diverge, the rim sweeping up over the top while the body descends. One gesture splitting, rather than two marks appearing. Same round settled the easing at `easeInOutQuart`, a much more pronounced slow-fast-slow than Flutter's default `easeInOut`.
+
+Then the footring, which took four rounds by itself and is my favourite part of this.
+
+It still read as a separate mark. The obvious fix — make it part of the pot's stroke — is impossible: the footring is a chord between `(33,100)` and `(67,100)`, two points the body outline *already passes through*. Joining them would mean the pen doubling back over ground it had covered. It's a detail line, not part of the silhouette.
+
+What actually made it feel disconnected was timing. It ran its own 750ms clock, so it finished long before the body's stroke arrived at the base. The fix was to drive every subpath from one clock and gate the footring on the body's own progress — measure where the body path crosses those two points, get a window of **41% → 59%** of its length, and draw the ring only across that window. It now appears under the pen as it sweeps by:
+
+```dart
+/// Where along the body subpath the stroke passes the footring's two ends.
+///
+/// The footring is a chord between two points the body outline already travels
+/// through, so it cannot be drawn as part of that stroke without doubling back.
+/// Instead it is gated on these fractions, which makes the ring appear under the
+/// pen as it sweeps the base rather than running on its own clock.
+const _footringWindowStart = 0.41;
+const _footringWindowEnd = 0.59;
+```
+
+That also reversed an earlier decision. Round 21 had made the footring draw right-to-left, as deliberate counterpoint against three left-to-right strokes, and at the time that was correct. Once the ring is gated on the pen's crossing, drawing it right-to-left runs it *against* the stroke it's supposed to be following — closing toward the pen instead of trailing it. Round 23 put it back. A decision stops being valid when its premise changes.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/25-drawon-final.png",
+      caption:
+        "Round 25 — the approved sequence on device, same opening frames. One point, one stroke splitting, and the vessel resolving out of it.",
+    },
+  ]}
+/>
+
+## The 450 milliseconds of nothing
+
+Third complaint: the cut into the app. I added a fade to the destination route, and it didn't help. Capturing the handoff at 30fps showed why.
+
+<Figure
+  cols={1}
+  items={[
+    {
+      src: "/blog/potter-logo/26-handoff-gap.png",
+      label: "Before",
+      caption:
+        "the mark lifts away cleanly, then roughly 450ms of blank cream, then the app appears in a single frame",
+    },
+    {
+      src: "/blog/potter-logo/27-overlay-crossfade.png",
+      label: "After",
+      caption:
+        "the journal is visible through the fading mark — both on screen at the same time",
+    },
+  ]}
+  caption="Two captures of the same handoff at 30fps. Everything between the two was architecture, not timing."
+/>
+
+The route fade *was* running. It was fading in an **empty** album — the album's data stream only starts when the album mounts, so the page had nothing to paint during its own transition and the content popped in afterwards. A transition can't rescue a screen that isn't ready.
+
+Subscribing to the album's query from the splash, while the mark is still being drawn, cut the gap from ~450ms to ~330ms. But a gap remained, and it was architectural: the splash was a **route**, so the app could not exist until the splash stopped existing. Every frame of blank cream was Flutter building the shell and album *after* the splash was gone.
+
+The splash is now an **overlay**. `MaterialApp.builder` stacks it above the router, so the app builds, redirects and loads its data underneath while the mark is still being drawn. Lifting the overlay reveals a screen that was already there.
+
+In order, the fixes I tried: add a route transition (no effect — it was fading in an empty page); pre-warm the album's query (450 → 330ms); add motion to the entry (no effect — the gap was *before* the transition); make the splash an overlay (gap gone). The first three were treating a symptom.
+
+## The shipped thing
+
+<Figure
+  cols={3}
+  items={[
+    {
+      src: "/blog/potter-logo/launch.gif",
+      label: "Launch",
+      caption:
+        "icon zoom, cream ground, the mark drawing itself on over 750ms, a 250ms beat, then the mark fading and scaling to 1.16 while the journal is already sitting underneath it",
+    },
+  ]}
+/>
+
+| | |
+| --- | --- |
+| Draw duration | 750ms |
+| Easing | `Curves.easeInOutQuart` |
+| Rim | starts at its leftmost point `(36, 9.9)`, sweeping up over the top |
+| Body | starts at the same point, descending the left side |
+| Footring | left to right, gated on the body's 41%→59% crossing window |
+| Exit hold | 250ms |
+| Exit lift | 400ms, fade to 0 while scaling to 1.16 |
+| Mark | stroke 3.6, `#313131` |
+| Splash ground | `#EDE5DA` · icon ground `#E3D3BD` |
+
+TK does the shipped mark actually satisfy you? Everything above is what the archive records; whether you're happy with the result is the one thing it doesn't say. A closing paragraph in your own voice belongs here.
+
+## What I'd take to the next one
+
+- **Render before asking.** Round 1 was presented to me as "these aren't good enough" rather than as a choice, because seeing them made the flaw obvious. A verbal description of a vase silhouette is nearly worthless. The render takes seconds and settles it.
+- **Comparisons beat sequences.** The round 7-vs-8 page and the 2× foot crop each revealed something that full-size, one-at-a-time review had not. Two rounds existing only so they can sit next to each other is a good use of a round.
+- **Ask what a rough edge is doing before sanding it.** Round 8 smoothed away the footring that made round 7 correct.
+- **Constraints hide in the smallest gap.** Nobody predicts that a decorative footring line sets the maximum stroke weight for the whole mark, at both sizes.
+- **A reference image is worth many rounds.** Six rounds of approximating, then one photo made the target unambiguous.
+- **Approving a design doesn't mean it shipped.** The port to code silently changed the proportions, and neither the golden test nor the code review caught it. For a shape, verifying means measuring the rendered dimensions — not reading the code that produces them.
+- **Verify with the toolchain that ships.** One device check went wrong in a way that looked exactly like a critical bug in this feature: the app sat on a blank cream screen forever. It wasn't the animation. An unsigned simulator build has no keychain entitlement, so the encrypted database can't read its key and `main()` throws before `runApp` is ever called. `flutter run` signs the app; a hand-installed unsigned build loses entitlements and fails in ways that impersonate application bugs.
+
+TK possible closing tie-back to the Gonna Rain post, which makes a similar point about AI collapsing the cost of producing options but not the cost of being wrong about which one you picked. Up to you whether you want the two posts talking to each other.
