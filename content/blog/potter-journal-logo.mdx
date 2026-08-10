@@ -232,6 +232,8 @@ Round 14 asked a different question: how much of the tile should the vase fill?
   ]}
 />
 
+TK the caption above says "at four tile sizes", but the image under it shows three. The shipped `14-icon-in-tile.png` is 1400×1180, cropped from the 1400×1800 archive source `round-14-icon-scale-in-tile.png`, and the crop drops the top row: it opens at "120PX TILE" and runs 120, 80, 60. The archive itself does support the number — `round-14-icon-scale-in-tile.html` loops over 180, 120, 80 and 60 — so this is a crop problem, not a claim problem. Whether to fix it by rewording the caption to three or by re-exporting the image to restore the 180px row is your open question, and it's recorded separately as its own follow-up. I've left both the caption and the asset untouched.
+
 **72%** — `markSize` 740 of 1024. 61% was just the number the generator started with, and beside denser home-screen icons it looks apologetic.
 
 ## Cream, on a home screen, is just white
@@ -251,6 +253,8 @@ Everything above was judged against cream `#EDE5DA`, which is the app's own back
 **`#E3D3BD` was chosen.** Past roughly `#CFB490` the tile drifts from ceramic toward khaki and starts competing with the mark instead of supporting it.
 
 Round 17 tried a warmer ink (`#2E241C`) on that ground to match. It's real at 180px and essentially invisible at 60px, so the neutral `#313131` stayed — one ink shared by the icon and the splash.
+
+TK the round 17 sentence above lost its antecedent somewhere in editing. The archive's line is a comparison — "tested a warmer ink (`#2E241C`) against the neutral `#313131` on that ground. Real at 180px, essentially invisible at 60px" — so what's invisible at 60px is the *difference between the two inks*, not the warm ink, which obviously still renders at 60px. Dropping the "against the neutral `#313131`" clause removed the only thing "it" could point at. Needs a phrase that restores the comparison.
 
 The ground change is **icon-only**. In-app surfaces stay cream. The colour shift happens during the icon-zoom launch transition, where it reads as the app opening rather than as an inconsistency.
 
@@ -277,6 +281,10 @@ No amount of re-timing a single travelling stroke fixes that. It's inherent to t
 TK did the "pulled up on a wheel" reading actually land for you, or is that the agent's framing? It's in the round notes but I don't know if you agreed.
 
 Round 20 re-rooted the rim ellipse from its rightmost point `(64, 9.8)` to its **leftmost** `(36, 9.9)` — the same point where the body begins — so both strokes leave one place and diverge, the rim sweeping up over the top while the body descends. One gesture splitting, rather than two marks appearing. Same round settled the easing at `easeInOutQuart`, a much more pronounced slow-fast-slow than Flutter's default `easeInOut`.
+
+TK "Same round settled the easing" credits round 20 with a decision the archive puts one round later, and with the value round 20 argued against. `round-20-left-start-easing.html` flags `easeInOutCubic` as the suggested easing and 650ms as the suggested duration; the README's round 20 entry only describes the comparison. The lock shows up in the round 21 entry, which opens "Timing locked to `easeInOutQuart` at 750ms". Either name round 21 for the lock or say round 20 laid out the options.
+
+TK "Flutter's default `easeInOut`" isn't supported by the archive or by Flutter. Round 20's page labels `easeInOut` as "What ships today" — the splash's then-current easing, set in the implementation plan at 900ms with `Curves.easeInOut` — not a framework default. Flutter's implicitly-animated widgets default to `Curves.linear`, and there's no framework-wide `easeInOut` default to contrast against. The honest comparison is against the plain `easeInOut` the splash shipped with.
 
 Then the footring, which took three rounds on its own.
 
