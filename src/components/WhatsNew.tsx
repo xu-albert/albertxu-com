@@ -18,6 +18,7 @@ const highlights: Highlight[] = [
     kind: "Case study",
     date: "July 2026",
     title: "Gonna Rain?",
+    // TK this blurb promises an App Store rejection that the case study never tells. add the rejection to the case study and the build timeline, or reword this line.
     description: "Minute-by-minute rain alerts, and the rejection that stalled them.",
     href: "/projects/gonna-rain",
     image: "/gonna-rain.png",
