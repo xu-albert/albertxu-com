@@ -8,7 +8,7 @@ export const metadata = {
 
 import Figure from "@/components/Figure";
 
-TK the title and the excerpt in the metadata block above are both placeholders. Title options: "Twenty-eight rounds for one vase", "How I picked the Potter Journal logo", "A logo with no pressure". The excerpt is what shows on the blog card, so it's worth a pass in your voice.
+TK the title and the excerpt in the metadata block above are both placeholders. Title options: "Twenty-eight rounds for one vase", "How I picked the Potter Journal logo", "A logo with no pressure". The excerpt is what shows on the blog card, so it's worth a pass in your voice. The `coverImage` is my placeholder too and equally your call: it points at `/blog/potter-logo/01-gooseneck.png`, the round 1 sheet this post introduces under "Round 1: they were light bulbs" as the rejected start, and `/blog` crops it to a 160×96 `object-cover` thumbnail from a 2360×1240 source (`src/app/blog/page.tsx`) — so the card advertising this post shows four small light-bulb-ish outlines and an illegible header rather than the final mark.
 
 [Potter Journal](/projects/potter-journal) shipped in February with a placeholder splash screen: a lightbulb outline sitting on a cream background for a second while the app booted. It was never meant to survive. In July I finally replaced it.
 
@@ -18,7 +18,7 @@ What I wanted was specific. The mark should **draw itself on** as the app opens,
 
 TK why HEYTEA? Worth a sentence or two here — what about their marks you were going for. Same for "why a bud vase specifically" further down.
 
-That took twenty-eight rounds. Every round is archived as an HTML page plus a screenshot, which is the only reason I can write this at all.
+That took twenty-eight rounds. Almost every round is archived as an HTML page plus a screenshot — the on-device ones are screen captures instead — which is the only reason I can write this at all.
 
 TK do you want to link the archive? It lives in the pottery-tracker repo, which is private, so right now the post describes something the reader can't open. Options: publish the archive folder somewhere, host the round pages on this site, or leave it unlinked and cut the sentence above. Your call — I've left it unlinked.
 
@@ -67,6 +67,8 @@ That's the whole fix. A rounded bottom says balloon; a foot says vessel.
 ## The rim ellipse
 
 The single biggest improvement in the whole process came from a one-line note: add a crooked ellipse at the mouth. It turned a flat outline into a vessel with an opening.
+
+TK whose note was that? The archive README credits the crooked rim ellipse to the client — you — but I've left it unattributed rather than put the credit in your mouth. Worth a pass in your own voice: the post names every other input directly ("Round 5 came from a note I gave"), so the bare passive stands out here, on the one change the piece calls the biggest improvement in the process.
 
 <Figure
   items={[
@@ -254,7 +256,7 @@ The ground change is **icon-only**. In-app surfaces stay cream. The colour shift
 
 ## Making it draw itself
 
-First device build. Three complaints, all mine: the animation drew "from both sides", it felt slow, and it cut too abruptly into the app.
+First build on the simulator. Three complaints, all mine: the animation drew "from both sides", it felt slow, and it cut too abruptly into the app.
 
 <Figure
   items={[
