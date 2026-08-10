@@ -22,8 +22,6 @@ Luckily, the same weather data is available in Apple's WeatherKit. All I had to 
 
 `Gonna Rain?` shows you the next hour minute-by-minute, the next twelve hours, and the week — then gets out of the way. The background is the weather: it darkens when it rains, goes navy and speckled when it snows.
 
-The part that matters is the notifications. It tells you when rain is about to start, and when it's about to stop, and it does that whether or not the app is open, because a server is watching the forecast for your location on a ten-minute cron.
-
 <Figure
   cols={3}
   items={[
@@ -33,73 +31,43 @@ The part that matters is the notifications. It tells you when rain is about to s
   ]}
 />
 
+TK insert live activities screenshots here as well. you can use the screenshots in the will-it-rain repo.
+
 ## The build
 
 <RainBuildTimeline />
 
-### Three weeks to submittable (Feb 18 – Mar 6)
+Just building the basic weather function for the app was quite easy - I think anyone with experience building apps using AI can probably one shot this in a matter of minutes. What was hard was determining the notification logic, asking for correct permissions, and making it look nice.
 
-The first commit was a working app: WeatherKit charts, gradient backgrounds, precipitation animations, and a notification system. Then three days of the things that only show up once you run it — background refresh silently doing nothing because `BGTaskSchedulerPermittedIdentifiers` didn't match the registered task ID, chart taps landing on the wrong data point because the touch math ignored the Y-axis label width, and the precipitation animations not rendering at all, which I shelved rather than fight.
+### Fun animations
 
-The second week was about notifications that don't lie. A minute-level forecast flickers, and a naive implementation will tell you it's about to rain, then tell you it isn't, then tell you it is. I added two-pass confirmation — a rain start or end has to survive two consecutive checks before it fires — and adaptive polling that tightens from an hour down to two minutes as something approaches.
+It took a lot of trial and error to get the animations in a nice place. Claude did most of the heavy lifting, but I had 
 
-The third week was the part I didn't expect to need. On-device background refresh is best-effort; iOS runs it when it feels like it. If you want a notification to reliably arrive while the app is closed, something else has to be awake. So the app grew a backend: a Cloudflare Worker on a ten-minute cron that calls the WeatherKit REST API and pushes through APNs directly.
+TK insert debugging screen with pills of different weather options and time of day
 
-The interesting constraint there was quota. Every registered device is a location, and every distinct location is a WeatherKit call against a 500k/month limit. So locations get snapped to a grid of roughly one-kilometre cells, and everyone in a cell shares one forecast fetch. Your neighbours cost nothing.
+Here are example animations that I finally landed on:
 
-I also renamed the app. "Will It Rain" was taken several times over; "Gonna Rain?" was not.
+TK insert gif of heavy rain, snow, and hail
 
-### Rejected (Mar 11)
+### Notifications
 
-Guideline 5.2.5. WeatherKit apps have to display the Apple Weather trademark and a link to Apple's legal attribution page, and Apple's reviewer said mine didn't.
+The native iOS app DOES tell you when it's going to rain. But by the time I check on the weather, sometimes the weather has already changed, and I'm not able to plan effectively. I also have a threshold for rain — maybe I'm okay with a little rain, but I'm not happy to go out when it's pouring outside.
 
-It did. I could point at the line of code. I made a small fix, resubmitted, and it was rejected again.
-
-Then I stopped touching it for four months.
-
-### Root cause (Jul 24)
-
-When I came back, I stopped trying to prove the attribution existed and asked instead where a reviewer could stand and not see it. That turned out to be a much better question, and it had three answers.
-
-The attribution lived inside the loaded state. If the reviewer hit a slow network or denied location permission, the app rendered a loading or error screen with no attribution anywhere on it. It was drawn at 60% white, which on the near-white clear-day gradient was close to invisible. And it sat at the bottom of a stack of spacers, which on the 11-inch iPad the reviewer used could crowd it under the home indicator.
-
-> **Present in code is not present on screen.** The attribution was never missing; it was conditional, low-contrast, and clippable — and to someone looking at a device for thirty seconds, those are indistinguishable from absent. I'd spent two rejections defending the code instead of looking at the screen.
-
-The fix was to pull it into its own view, render it as an overlay on the root view so it appears in every state, and back it with a translucent capsule so full-opacity white text is legible on both the darkest rain gradient and the lightest clear one. Then I reproduced Apple's exact setup — iPad Air 11-inch simulator, all three states, light and dark backgrounds — and checked it with my own eyes before resubmitting.
-
-It cleared review the next day. Four months of not touching it, then one day of looking at the right thing.
-
-### Writing the words before the pixels
-
-The same week I rebuilt the notification system, and the first thing I made wasn't code. It was a sheet showing every notification the app could send, rendered as it would appear on a lock screen.
+This does feel a little overengineered, but it was becoming a real pain to look outside the window to see if it was still raining or not. And even when you look outside, sometimes it's hard to see actual raindrops falling.
 
 <Figure
-  cols={1}
+  cols={2}
   items={[
     { src: "/gonna-rain/notif-copy-v1.png", label: "v1", caption: "every message ended in advice" },
     { src: "/gonna-rain/notif-copy-v2.png", label: "v2", caption: "the advice cut, the facts kept" },
   ]}
-  caption="Seeing all the copy at once made the pattern obvious in a way that reading one string at a time never did."
 />
 
-Read individually, "Rain expected in about 20 minutes. Grab an umbrella." is friendly. Read as a column of nine, the app turns into someone who tells you to grab an umbrella every single time it rains. I cut the advice and kept the facts. I also swapped "eases off" for "stops," because I don't know that it will ease off — I know when the forecast says it ends.
+I wanted my notifications to spam me repeatedly each time rain started and stopped. TK insert the system design explanations for how we wired up notifications
 
-### Two directions for the lock screen
+### Live notifications
 
-Then Live Activities. The idea is that when rain is incoming, a card sits on your lock screen counting down, and updates itself as the forecast moves.
-
-I explored two directions. The first was to draw the app on the lock screen — the same navy and cyan, the same minute-by-minute chart, shrunk down. The second was to throw the chart away and use a thin progress track, the way a delivery or ride app shows you where your driver is.
-
-<Figure
-  items={[
-    { src: "/gonna-rain/la-v2-card.png", label: "v2", caption: "the app's own chart, miniaturised" },
-    { src: "/gonna-rain/la-v3-card.png", label: "v3", caption: "a thin track: white dot is now, cyan is rain" },
-  ]}
-/>
-
-The chart version is more informative and worse. A lock screen gets looked at for about a second, and in that second a chart asks you to read axes. The track version answers "when" with a number and "how long" with the length of a coloured stretch, and you can take both in without focusing.
-
-The track also handles the case the chart couldn't. Showers aren't one block of rain, they're several with gaps, and multiple cyan stretches on a track say that instantly.
+I really like how apps like DoorDash and Lyft structure their live notifications. There's a progress bar for when something is about to be done.
 
 <Figure
   cols={2}
@@ -110,13 +78,20 @@ The track also handles the case the chart couldn't. Showers aren't one block of 
   caption="The design language I borrowed from — the track, the countdown, the one line of context."
 />
 
+I wanted to recreate that experience with the weather app. I think it's extremely useful to reflect that granular rain information on the lock screen, so I know exactly when I'm able to step out.
+
+<Figure
+  items={[
+    { src: "/gonna-rain/la-v2-card.png", label: "v2", caption: "the app's own chart, miniaturised" },
+    { src: "/gonna-rain/la-v3-card.png", label: "v3", caption: "a thin track: white dot is now, cyan is rain" },
+  ]}
+/>
+
+I decided eventually to use a flat bar, similar to conventional live activity notifications. The chart, while informative, makes the lock screen too cluttered.
+
 ### Snow (1.1.1)
 
-The Live Activity shipped rendering rain visuals for everything. During snow you'd get a cyan track and a droplet, and only the wording would change to "Snowing now."
-
-The cause wasn't cosmetic. The data structure the server pushes to the lock screen carried no precipitation type, so the widget had no way to know. The app knew — it was already picking snow wording — but that knowledge never crossed the boundary.
-
-Fixing the data was easy. Deciding what snow should look like took three rounds.
+Snow became the next natural weather phenomenon to focus on. The logic was built out already, but I wanted it to look cool.
 
 <Figure
   cols={2}
@@ -129,23 +104,15 @@ Fixing the data was easy. Deciding what snow should look like took three rounds.
   caption="Round one: four directions, drawn at the real card's dimensions and type scale so the comparison would hold. I picked Frost, then spent two more rounds pushing it whiter until the blue was almost entirely out."
 />
 
-Two of the decisions that followed were function rather than taste. The glyph inside the header badge had to go dark, because the badge is filled with the track gradient and a white snowflake on a near-white badge disappears. And the ring around the "now" dot had to be tinted, because when it's snowing the track starts at zero — directly under a white dot — and two whites merge.
+If you're working on a project that demands you to draw things in your design, I encourage you to ask your agent to spin up multiple designs, then output an HTML page for you to pick and choose something. I unfortunately wasn't using it for this project, but a tool like [Lavish](https://github.com/kunchenguid/lavish-axi) is extremely useful as a visual based option for providing feedback and choosing between designs.
 
 <Figure
   items={[
     { src: "/gonna-rain/card-rain.png", label: "Rain", caption: "cyan track, droplet" },
     { src: "/gonna-rain/card-wintry.png", label: "Wintry", caption: "near-white track, snowflake, tinted ring" },
   ]}
-  caption="The same card, rendered on device. Sleet, hail and mixed all share the wintry treatment — the visual fork is binary, so the data driving it is too."
+  caption="The same card, rendered on device. Sleet, hail and mixed all share the wintry treatment."
 />
-
-Two things went wrong on the way, and both were more interesting than the feature.
-
-> **The new field had to be optional.** Swift's generated decoding throws on a missing key even when the property has a default — only an optional decodes absence. A non-optional would have meant that any update sent by a server version predating the field would fail to decode, and the card would stop updating. No error, no crash, just a frozen countdown on someone's lock screen during the storm the feature exists for.
-
-> **Rendering the card for the first time invalidated the decision I'd just made.** The track had a stray six-point offset inside a container that was already centring it, so it hung below the row of dots instead of running through them — shipped in 1.1, affecting rain equally. Which meant the tinted "now" ring had been chosen by comparing mockups where the dot sits inside the track, a situation the app had never once drawn. I picked a colour to solve a problem that didn't exist yet, then shipped the bug that would have caused it.
-
-That second one is the reason 1.1.1 grew a screenshot harness that renders the lock-screen card directly. Verification you can't repeat decays, and I'd just proved I couldn't trust a mockup to tell me what the app does.
 
 ## Final thoughts
 
@@ -153,9 +120,9 @@ Claude wrote most of this code, as it did for [Potter Journal](/projects/potter-
 
 Every design comparison on this page — the notification copy sheet, the two Live Activity directions, the snow palettes — is a Claude-generated HTML mockup, built to mirror the real view's dimensions and type scale so the comparison would hold. That turned out to be the highest-leverage thing in the project. Choosing between four snow treatments took me about a minute because I was looking at four snow treatments; describing them in prose and imagining them would have taken longer and produced a worse answer. The mockups are archived in the repo with the rejected options intact, so revisiting a decision doesn't mean rebuilding the alternatives.
 
-It was also good at the parts that are just tedious: reproducing a reviewer's device configuration, working out that a rate limit was from minting a fresh auth token per push instead of caching it, writing a script that drives every Live Activity state so I don't have to wait for weather.
+It was also good at the parts that are just tedious: working out that a rate limit came from asking for a fresh login token on every single notification instead of reusing one, or writing a script that drives every state of the lock screen card so I don't have to wait for weather.
 
-What it could not do was notice that the app had been drawing the track in the wrong place for a month. That took rendering the thing and looking at it. The whole 5.2.5 saga was the same shape — two rejections spent on the code, resolved in a day once I looked at the screen a reviewer would see. AI collapses the cost of producing an option enormously. It doesn't do much for the cost of being wrong about which one you're looking at.
+What it could not do was notice that the app had been drawing the track in the wrong place for a month. That took rendering the thing and looking at it. AI collapses the cost of producing an option enormously. It doesn't do much for the cost of being wrong about which one you're looking at.
 
 ### What's next
 
