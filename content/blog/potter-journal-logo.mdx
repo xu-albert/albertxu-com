@@ -8,9 +8,11 @@ export const metadata = {
 
 import Figure from "@/components/Figure";
 
-TK the title is a placeholder — other options: "Twenty-eight rounds for one vase", "How I picked the Potter Journal logo", "A logo with no pressure".
+TK the title and the excerpt in the metadata block above are both placeholders. Title options: "Twenty-eight rounds for one vase", "How I picked the Potter Journal logo", "A logo with no pressure". The excerpt is what shows on the blog card, so it's worth a pass in your voice.
 
-[Potter Journal](/projects/potter-journal) shipped in February with a placeholder splash screen: a lightbulb outline, left over from a template, sitting on a cream background for a second while the app booted. It was never meant to survive. In July I finally replaced it.
+[Potter Journal](/projects/potter-journal) shipped in February with a placeholder splash screen: a lightbulb outline sitting on a cream background for a second while the app booted. It was never meant to survive. In July I finally replaced it.
+
+TK a shot of the old placeholder splash and the old app icon belongs here — the design archive doesn't contain either one, so it has to come from you (a screenshot, or pull the old `icon.png` out of the pottery-tracker history). Without it the reader never sees the "before".
 
 What I wanted was specific. The mark should **draw itself on** as the app opens, like someone sketching it in front of you, and the same shape should become the app icon so the two can't drift apart. Visually: keep the gooseneck vase from the old icon, make it a simple hand-drawn silhouette, HEYTEA-inspired.
 
@@ -18,9 +20,11 @@ TK why HEYTEA? Worth a sentence or two here — what about their marks you were 
 
 That took twenty-eight rounds. Every round is archived as an HTML page plus a screenshot, which is the only reason I can write this at all.
 
+TK do you want to link the archive? It lives in the pottery-tracker repo, which is private, so right now the post describes something the reader can't open. Options: publish the archive folder somewhere, host the round pages on this site, or leave it unlinked and cut the sentence above. Your call — I've left it unlinked.
+
 ## The one thing I couldn't have
 
-Before any of the drawing, there was a constraint I didn't see coming.
+Before any of the drawing, there was a constraint that set the terms for everything after it.
 
 **Flutter's canvas cannot stroke a path with varying width.** `drawPath` with a stroke paint gives you one uniform thickness for the whole line. That sounds like a small thing until you think about what makes a drawn line look drawn: pressure. The stroke swells where the pen presses and thins where it lifts. That's the entire visual signature of ink, and it was simply not available.
 
@@ -58,11 +62,11 @@ Round 2 added a flared lip and a wider base, but the "flat" base was still built
   ]}
 />
 
-That's the whole fix. A rounded bottom says balloon; a foot says vessel. Two control points.
+That's the whole fix. A rounded bottom says balloon; a foot says vessel.
 
 ## The rim ellipse
 
-The best single idea in the process wasn't mine — I asked for a crooked ellipse at the mouth, and it turned a flat outline into a vessel with an opening.
+The single biggest improvement in the whole process came from a one-line note: add a crooked ellipse at the mouth. It turned a flat outline into a vessel with an opening.
 
 <Figure
   items={[
@@ -73,8 +77,6 @@ The best single idea in the process wasn't mine — I asked for a crooked ellips
     },
   ]}
 />
-
-TK worth confirming: my memory of the archive is that the rim ellipse came from you, not the agent. Correct that if it's backwards.
 
 It also cost something. The mark went from one continuous path to **three subpaths** — rim, body, footring — and that quietly invalidated a pile of assumptions in the implementation plan, which had been written around tracing a single stroke. It comes back to bite in the animation section.
 
@@ -100,7 +102,7 @@ Naming that saved a round. What it produced instead was a new problem: rotating 
 
 ## One photo collapsed six rounds
 
-Six rounds in, I gave up describing what I wanted and sent a photo of a Ming **yuhuchunping** — a pear-shaped bud vase. It isn't in the archive (it's someone else's photograph), but it made the target unambiguous in a way that no amount of prose had: trumpet lip flaring sharply, neck narrowest near the top and widening all the way down, widest point about two-thirds down, a distinct raised footring.
+Six rounds in, I stopped describing what I wanted and sent a photo of a Ming **yuhuchunping** — a pear-shaped bud vase. It isn't in the archive (it's someone else's photograph), but it made the target unambiguous in a way that no amount of prose had: trumpet lip flaring sharply, neck narrowest near the top and widening all the way down, widest point about two-thirds down, a distinct raised footring.
 
 TK where did the reference come from, and why this form? "Ming pear-shaped bud vase" is what the archive records, but not why you wanted it.
 
@@ -178,7 +180,7 @@ The shape was locked, ported to Dart, and rendered on device 20% too wide.
 
 The design space is 100×120 — a 5:6 ratio. The porting instructions scaled the axes independently (`sx = width/100`, `sy = height/120`) while the widget passed a *square* box, so at `Size(120, 120)` the x axis scaled by 1.2 and the y by 1.0. Measured bounds aspect: **0.699** against the approved **0.582**. Every preview I'd approved came from an SVG `viewBox="0 0 100 120"`, which preserves the ratio. The Dart port silently did not.
 
-Two things about this bother me more than the bug:
+Two things about how it was caught matter more than the bug:
 
 - **The golden test couldn't catch it.** A golden captures whatever the code produces, so it locked in the wrong shape just as happily as the right one and would have passed forever after.
 - **The code review didn't catch it either.** It flagged that the vertical-centering term was always exactly zero and graded that Minor. That dead term was a *symptom* of the same broken formula — but the review stopped at the arithmetic without asking what the shape actually came out looking like.
@@ -252,7 +254,7 @@ The ground change is **icon-only**. In-app surfaces stay cream. The colour shift
 
 ## Making it draw itself
 
-First device build. Three complaints, all mine, all in one sitting: the animation drew "from both sides", it felt slow, and it cut too abruptly into the app.
+First device build. Three complaints, all mine: the animation drew "from both sides", it felt slow, and it cut too abruptly into the app.
 
 <Figure
   items={[
@@ -274,7 +276,9 @@ TK did the "pulled up on a wheel" reading actually land for you, or is that the 
 
 Round 20 re-rooted the rim ellipse from its rightmost point `(64, 9.8)` to its **leftmost** `(36, 9.9)` — the same point where the body begins — so both strokes leave one place and diverge, the rim sweeping up over the top while the body descends. One gesture splitting, rather than two marks appearing. Same round settled the easing at `easeInOutQuart`, a much more pronounced slow-fast-slow than Flutter's default `easeInOut`.
 
-Then the footring, which took four rounds by itself and is my favourite part of this.
+Then the footring, which took four rounds on its own.
+
+TK I wrote this section as the most interesting stretch of the whole project, which is my read of the archive and not necessarily yours. If it is your favourite part, say so here — it's the natural place for one line of enthusiasm. If it isn't, cut this line and the section still works.
 
 It still read as a separate mark. The obvious fix — make it part of the pot's stroke — is impossible: the footring is a chord between `(33,100)` and `(67,100)`, two points the body outline *already passes through*. Joining them would mean the pen doubling back over ground it had covered. It's a detail line, not part of the silhouette.
 
@@ -292,6 +296,20 @@ const _footringWindowEnd = 0.59;
 ```
 
 That also reversed an earlier decision. Round 21 had made the footring draw right-to-left, as deliberate counterpoint against three left-to-right strokes, and at the time that was correct. Once the ring is gated on the pen's crossing, drawing it right-to-left runs it *against* the stroke it's supposed to be following — closing toward the pen instead of trailing it. Round 23 put it back. A decision stops being valid when its premise changes.
+
+With the draw-on settled, the exit could finally be judged against it — round 18 had tested transitions against a placeholder animation, which turns out to tell you very little.
+
+<Figure
+  items={[
+    {
+      src: "/blog/potter-logo/24-transitions.png",
+      caption:
+        "Round 24 — four exits, each playing the real approved draw-on first so only what happens afterwards differs. Rendered on grey so the screen edge is visible.",
+    },
+  ]}
+/>
+
+The sheet suggested T3 — a 400ms beat, then a cross-fade. **T4 was chosen instead:** a shorter 250ms beat, then the mark fades and scales to 1.16 over 400ms while the app arrives beneath it. It reads as moving past the mark rather than the mark being switched off.
 
 <Figure
   items={[
@@ -363,6 +381,8 @@ In order, the fixes I tried: add a route transition (no effect — it was fading
 TK does the shipped mark actually satisfy you? Everything above is what the archive records; whether you're happy with the result is the one thing it doesn't say. A closing paragraph in your own voice belongs here.
 
 ## What I'd take to the next one
+
+TK these are the archive's own "what generalizes" notes, reworded — they're the agent's conclusions about the process, not yours. Cut the ones you don't actually believe and reorder the rest; a list of seven that you half-agree with is worse than a list of three that you do.
 
 - **Render before asking.** Round 1 was presented to me as "these aren't good enough" rather than as a choice, because seeing them made the flaw obvious. A verbal description of a vase silhouette is nearly worthless. The render takes seconds and settles it.
 - **Comparisons beat sequences.** The round 7-vs-8 page and the 2× foot crop each revealed something that full-size, one-at-a-time review had not. Two rounds existing only so they can sit next to each other is a good use of a round.
