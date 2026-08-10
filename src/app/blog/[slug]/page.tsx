@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPost, getSlugs } from "@/lib/blog";
+import { formatDate } from "@/lib/date";
 import TableOfContents from "@/components/TableOfContents";
 import type { Metadata } from "next";
 
@@ -48,11 +49,7 @@ export default async function BlogPost({
         {post.meta.title}
       </h1>
       <p className="mt-3 text-sm text-muted">
-        {new Date(post.meta.date).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}{" "}
+        {formatDate(post.meta.date)}{" "}
         · {post.readingTime} min read
       </p>
 

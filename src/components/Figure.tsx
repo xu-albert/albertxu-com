@@ -6,10 +6,10 @@
 // On narrow screens the row stacks. `cols` sets the desktop column count; it
 // defaults to the number of items.
 //
-// An item with `pending: true` renders a labelled dashed slot instead of an
-// image, so a comparison can be laid out before every asset exists. Those slots
-// are visible on the page by design — they should be filled or removed before
-// the page is considered done.
+// An item with `pending: "…"` renders a dashed slot instead of an image, with
+// the string as the slot's label, so a comparison can be laid out before every
+// asset exists. Those slots are visible on the page by design — they should be
+// filled or removed before the page is considered done.
 
 interface FigureItem {
   src?: string;

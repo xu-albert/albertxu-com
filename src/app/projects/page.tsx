@@ -1,17 +1,10 @@
 import Link from "next/link";
 import { getFeed } from "@/lib/feed";
+import { formatDate } from "@/lib/date";
 
 export const metadata = {
   title: "Projects",
 };
-
-function formatDate(date: string): string {
-  return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 export default async function Projects() {
   const entries = await getFeed();

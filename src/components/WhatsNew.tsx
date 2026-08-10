@@ -18,7 +18,7 @@ const highlights: Highlight[] = [
     kind: "Case study",
     date: "July 2026",
     title: "Gonna Rain?",
-    // TK this blurb promises an App Store rejection that the case study never tells. add the rejection to the case study and the build timeline, or reword this line.
+    // TK this blurb promises an App Store rejection. you told that story in 13eea28 and then cut it in the rewrite, so it is recoverable, not missing: `git show 13eea28:content/projects/gonna-rain.mdx` has the "### Rejected (Mar 11)" section, guideline 5.2.5 and the Apple Weather attribution, the second rejection after resubmitting, the pull-quote about spending two rejections defending the code instead of looking at the screen, and a matching 5.2.5 line in Final thoughts. restore what you want of it, or reword this line.
     description: "Minute-by-minute rain alerts, and the rejection that stalled them.",
     href: "/projects/gonna-rain",
     image: "/gonna-rain.png",

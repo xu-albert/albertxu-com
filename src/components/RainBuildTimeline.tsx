@@ -8,6 +8,7 @@
 // either side already say how long it was.
 //
 // On narrow screens the track scrolls horizontally.
+// TK the comment above says the pause "was nothing more interesting than being busy elsewhere", but 13eea28 tells it as a 5.2.5 rejection, a resubmission, and a second rejection. which version is true is your memory, not ours. if the rejection goes back into the case study, this comment and a missing timeline phase between Submitted (Mar 11) and Picked it back up (Jul 24) both need to follow.
 
 const ACCENT = "#1c7cb0"; // deep sky blue — the "shipped" milestone
 
