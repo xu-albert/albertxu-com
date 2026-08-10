@@ -16,7 +16,7 @@ import Figure from "@/components/Figure";
 
 Even on rainy days, there are moments when the rain lets up for half an hour, and that's enough time to walk the dog quickly when otherwise you might not get the chance to. Granular weather updates are already available in my area through the native iOS weather app, but I wanted more active notifications to announce when exactly rain would stop, instead of having me obsessively check my phone every 10 minutes.
 
-Luckily, the same weather data is available in Apple's WeatherKit. All I had to do was make a nice looking application that served the notifications that I wanted.
+Luckily, the same weather data is available in Apple's WeatherKit. All I had to do was make a nice-looking application that served the notifications that I wanted.
 
 ## What it does
 
@@ -37,7 +37,7 @@ TK insert live activities screenshots here as well. you can use the screenshots 
 
 <RainBuildTimeline />
 
-Just building the basic weather function for the app was quite easy - I think anyone with experience building apps using AI can probably one shot this in a matter of minutes. What was hard was determining the notification logic, asking for correct permissions, and making it look nice.
+Just building the basic weather function for the app was quite easy — I think anyone with experience building apps using AI can probably one-shot this in a matter of minutes. What was hard was determining the notification logic, asking for correct permissions, and making it look nice.
 
 ### Fun animations
 
@@ -104,7 +104,7 @@ Snow became the next natural weather phenomenon to focus on. The logic was built
   caption="Round one: four directions, drawn at the real card's dimensions and type scale so the comparison would hold. I picked Frost, then spent two more rounds pushing it whiter until the blue was almost entirely out."
 />
 
-If you're working on a project that demands you to draw things in your design, I encourage you to ask your agent to spin up multiple designs, then output an HTML page for you to pick and choose something. I unfortunately wasn't using it for this project, but a tool like [Lavish](https://github.com/kunchenguid/lavish-axi) is extremely useful as a visual based option for providing feedback and choosing between designs.
+If you're working on a project that demands that you draw things in your design, I encourage you to ask your agent to spin up multiple designs, then output an HTML page for you to pick and choose something. I unfortunately wasn't using it for this project, but a tool like [Lavish](https://github.com/kunchenguid/lavish-axi) is extremely useful as a visual-based option for providing feedback and choosing between designs.
 
 <Figure
   items={[
@@ -126,7 +126,7 @@ What it could not do was notice that the app had been drawing the track in the w
 
 ### What's next
 
-1.1.1 is built and verified in the simulator, but the wintry treatment hasn't been seen in real weather — it was July when I finished it. WeatherKit reports precipitation type in a field I confirmed against live responses in four countries, and never once saw return snow.
+1.1.1 is built and verified in the simulator, but the wintry treatment hasn't been seen in real weather — it was July when I finished it. WeatherKit reports precipitation type in a field I confirmed against live responses in four countries, and never once saw it return snow.
 
 After that: push-to-start Live Activities, so the card can appear without the app having run first, and naming your city in the server-sent notifications, which currently say "in your area" because the backend stores only coordinates.
 
