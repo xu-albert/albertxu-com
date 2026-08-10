@@ -31,7 +31,15 @@ Luckily, the same weather data is available in Apple's WeatherKit. All I had to 
   ]}
 />
 
-TK insert live activities screenshots here as well. you can use the screenshots in the will-it-rain repo.
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/la-lockscreen.png", label: "Lock Screen", caption: "the card, where I actually look" },
+    { src: "/gonna-rain/la-island-expanded.png", label: "Island, expanded", caption: "held open: countdown and the same track" },
+    { src: "/gonna-rain/la-island-compact.png", label: "Island, compact", caption: "a glyph and the time left" },
+  ]}
+  caption="The Live Activity in the three places iOS puts it. One content state drives all three."
+/>
 
 ## The build
 
@@ -43,11 +51,23 @@ Just building the basic weather function for the app was quite easy — I think 
 
 It took a lot of trial and error to get the animations in a nice place. Claude did most of the heavy lifting, but I had 
 
-TK insert debugging screen with pills of different weather options and time of day
+<Figure
+  items={[
+    { src: "/gonna-rain/debug-picker.png", label: "Debug builds only", caption: "every condition and time of day as a pill, plus intensity and a hail toggle — so I never have to wait for weather to see a change" },
+  ]}
+/>
 
 Here are example animations that I finally landed on:
 
-TK insert gif of heavy rain, snow, and hail
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/anim-rain.gif", label: "Heavy rain", caption: "streaks, angled, varied in length and speed" },
+    { src: "/gonna-rain/anim-snow.gif", label: "Snow", caption: "flakes drift and wobble instead of dropping straight" },
+    { src: "/gonna-rain/anim-hail.gif", label: "Hail", caption: "fewer, rounder, faster" },
+  ]}
+  caption="Hail is forced from the picker, so the headline behind it still reads from the rain scenario it was drawn over."
+/>
 
 ### Notifications
 
@@ -63,20 +83,37 @@ This does feel a little overengineered, but it was becoming a real pain to look 
   ]}
 />
 
-I wanted my notifications to spam me repeatedly each time rain started and stopped. TK insert the system design explanations for how we wired up notifications
+I wanted my notifications to spam me repeatedly each time rain started and stopped.
+
+The app can't do that by itself. iOS decides when to wake it, and it won't wake it at all if you haven't opened it in days — which is exactly when you most want to be told. So the watching happens on a Cloudflare Worker, and the phone is only ever something that gets pushed to.
+
+```mermaid
+graph TD
+    A["App: push token + coordinates"] --> B["Cloudflare KV"]
+    C["Cron, every 10 minutes"] --> D["Group devices into ~1 km cells"]
+    B --> D
+    D --> E["WeatherKit: one call per cell"]
+    E --> F{"Is a minute wet?<br/>chance over 30%, intensity above zero"}
+    F -->|"first wet minute ahead"| G["Rain-start push"]
+    F -->|"first dry minute ahead"| H["Rain-end push"]
+    F -->|"activity token on file"| I["Live Activity content-state push"]
+```
+
+1. The app registers a push token, your coordinates and your lead time. That's the whole record; there's no account.
+2. The cron rounds every coordinate to two decimal places — roughly a kilometre — and groups devices by that key. Everyone in the same neighbourhood costs one WeatherKit call, not one each.
+3. A minute counts as wet when the chance is over 30% and the intensity is above zero. The first wet minute ahead is the start. If it's already wet, the first dry minute ahead is the end.
+4. You get the start push only if it falls inside your own lead time, and the end push only within half an hour of it. Each one writes a key that suppresses the same kind of push for the next thirty minutes, which is where "spam me repeatedly" stops short of actual spam.
+5. If a Live Activity is running, the app sends that activity's own token up too, and the same tick pushes it a fresh content state. When the dry minute finally lands, that push is marked as the ending one and the token is dropped.
+
+Every push is signed with a provider token from Apple. Apple lets you reuse one for an hour, and starts returning 429s if you keep asking for new ones, so the Worker mints one and holds it for forty minutes rather than per notification.
+
+Two things here were not obvious. A date inside a Live Activity payload is decoded as seconds since 2001, not since 1970, so a countdown encoded the ordinary way doesn't come out merely wrong — the whole push fails to decode and the card silently stops moving. And the content state is a replacement, not a merge: leave the precipitation type out of one push and the next tick turns a snowing card back into a rain card.
+
+The app still runs its own check whenever it's open, and that one wants the same answer twice in a row before it fires. A minute of rain that appears and vanishes between two polls isn't worth a notification.
 
 ### Live notifications
 
-I really like how apps like DoorDash and Lyft structure their live notifications. There's a progress bar for when something is about to be done.
-
-<Figure
-  cols={2}
-  items={[
-    { pending: "Reference: DoorDash Live Activity\n/gonna-rain/ref-doordash.png" },
-    { pending: "Reference: Lyft Live Activity\n/gonna-rain/ref-lyft.png" },
-  ]}
-  caption="The design language I borrowed from — the track, the countdown, the one line of context."
-/>
+I really like how apps like DoorDash and Lyft structure their live notifications. There's a progress bar for when something is about to be done. That's the design language I borrowed from: the track, the countdown, and one line of context.
 
 I wanted to recreate that experience with the weather app. I think it's extremely useful to reflect that granular rain information on the lock screen, so I know exactly when I'm able to step out.
 
