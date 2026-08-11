@@ -51,7 +51,7 @@ Just building the basic weather function for the app was quite easy — I think 
 
 It took a lot of trial and error to get the animations in a nice place. Claude did most of the heavy lifting, but I had 
 
-TK this sentence stops mid-thought. what was the part you had to do yourself on the animations?
+{/* TK this sentence stops mid-thought. what was the part you had to do yourself on the animations? */}
 
 <Figure
   items={[
@@ -59,7 +59,7 @@ TK this sentence stops mid-thought. what was the part you had to do yourself on 
   ]}
 />
 
-TK the seventh condition pill can't be reached at all: the row needs about 480pt and portrait only gives about 440pt, so it stays cut off at any scroll position, and landscape is no escape hatch because both bottom overlays — the pill picker and AttributionView — disappear when the app is rotated. do you want the picker redesigned so all seven fit in portrait?
+{/* TK the seventh condition pill can't be reached at all: the row needs about 480pt and portrait only gives about 440pt, so it stays cut off at any scroll position, and landscape is no escape hatch because both bottom overlays — the pill picker and AttributionView — disappear when the app is rotated. do you want the picker redesigned so all seven fit in portrait? */}
 
 Here are example animations that I finally landed on:
 
@@ -109,7 +109,7 @@ graph TD
 4. You get the start push only if it falls inside your own lead time, and the end push only within half an hour of it. Each one writes a key that suppresses the same kind of push for the next thirty minutes, which is where "spam me repeatedly" stops short of actual spam.
 5. If a Live Activity is running, the app sends that activity's own token up too, and the same tick pushes it a fresh content state. When the dry minute finally lands, that push is marked as the ending one and the token is dropped.
 
-TK that threshold is the same for everybody — 30% chance, any intensity above zero — and there's no setting for it anywhere in the app. up in Notifications you say you have a threshold for rain and aren't happy going out when it's pouring. do you want to soften that line, or should a per-user intensity threshold go in What's next?
+{/* TK that threshold is the same for everybody — 30% chance, any intensity above zero — and there's no setting for it anywhere in the app. up in Notifications you say you have a threshold for rain and aren't happy going out when it's pouring. do you want to soften that line, or should a per-user intensity threshold go in What's next? */}
 
 Every push is signed with a provider token from Apple. Apple lets you reuse one for an hour, and starts returning 429s if you keep asking for new ones, so the Worker mints one and holds it for forty minutes rather than per notification.
 

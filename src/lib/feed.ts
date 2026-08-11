@@ -34,7 +34,7 @@ const PROJECTS: Project[] = [
     slug: "lol-paparazzi",
     title: "LoL Paparazzi",
     tagline:
-      "A Discord bot that tracks your friends' ranked games and lets you bet on the outcome.",
+      "A Discord bot that tracks your friends' ranked games and progress, and lets you bet on the outcome.",
     image: "/lol-paparazzi.png",
     tags: ["JavaScript", "Discord.js", "PostgreSQL", "Railway"],
   },
@@ -42,7 +42,9 @@ const PROJECTS: Project[] = [
 
 // The one place the feed order lives: newest first, by hand. Projects carry no
 // dates, so nothing here is inferred — rearranging this list rearranges the
-// page. Anything missing from it fails the build rather than quietly vanishing.
+// page. Every blog post on disk and every PROJECTS entry has to be listed here
+// or the build fails; a project .mdx that was never added to PROJECTS is in
+// neither list, so it vanishes from the feed silently.
 const ORDER: { type: "project" | "blog"; slug: string }[] = [
   { type: "project", slug: "gonna-rain" },
   { type: "blog", slug: "ai-docs-audit" },
