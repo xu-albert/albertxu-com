@@ -25,18 +25,18 @@ Luckily, the same weather data is available in Apple's WeatherKit. All I had to 
 <Figure
   cols={3}
   items={[
-    { src: "/gonna-rain/app-rain.png", label: "Raining", caption: "hero flips to time-until-it-stops" },
-    { src: "/gonna-rain/app-clear.png", label: "Clear", caption: "the week, when there's nothing to say" },
-    { src: "/gonna-rain/app-snow.png", label: "Snowing", caption: "night gradient, falling flakes" },
+    { src: "/gonna-rain/app-rain.png", width: 460, height: 995, label: "Raining", caption: "hero flips to time-until-it-stops" },
+    { src: "/gonna-rain/app-clear.png", width: 460, height: 995, label: "Clear", caption: "the week, when there's nothing to say" },
+    { src: "/gonna-rain/app-snow.png", width: 460, height: 995, label: "Snowing", caption: "night gradient, falling flakes" },
   ]}
 />
 
 <Figure
   cols={3}
   items={[
-    { src: "/gonna-rain/la-lockscreen.png", label: "Lock Screen", caption: "the full card, on the wallpaper" },
-    { src: "/gonna-rain/la-island-expanded.png", label: "Island, expanded", caption: "held open: countdown and the same track" },
-    { src: "/gonna-rain/la-island-compact.png", label: "Island, compact", caption: "a glyph and the time left" },
+    { src: "/gonna-rain/la-lockscreen.png", width: 460, height: 303, label: "Lock Screen", caption: "the full card, on the wallpaper" },
+    { src: "/gonna-rain/la-island-expanded.png", width: 460, height: 303, label: "Island, expanded", caption: "held open: countdown and the same track" },
+    { src: "/gonna-rain/la-island-compact.png", width: 460, height: 303, label: "Island, compact", caption: "a glyph and the time left" },
   ]}
   caption="Three of the four presentations iOS defines, all driven by one content state. The fourth, minimal, only appears when another app is running an activity at the same time."
 />
@@ -55,18 +55,20 @@ TK this sentence stops mid-thought. what was the part you had to do yourself on 
 
 <Figure
   items={[
-    { src: "/gonna-rain/debug-picker.png", label: "Debug builds only", caption: "the condition and time-of-day pills, plus intensity and a hail toggle — the row scrolls, so the last one is cut off here" },
+    { src: "/gonna-rain/debug-picker.png", width: 900, height: 477, label: "Debug builds only", caption: "the condition and time-of-day pills, plus intensity and a hail toggle — six of the seven conditions fit on screen, the seventh is cut off at the right edge" },
   ]}
 />
+
+TK the seventh condition pill can't be reached at all: the row needs about 480pt and portrait only gives about 440pt, so it stays cut off at any scroll position, and landscape is no escape hatch because both bottom overlays — the pill picker and AttributionView — disappear when the app is rotated. do you want the picker redesigned so all seven fit in portrait?
 
 Here are example animations that I finally landed on:
 
 <Figure
   cols={3}
   items={[
-    { src: "/gonna-rain/anim-rain.gif", label: "Heavy rain", caption: "streaks, angled, varied in length and speed" },
-    { src: "/gonna-rain/anim-snow.gif", label: "Snow", caption: "flakes drift and wobble instead of dropping straight" },
-    { src: "/gonna-rain/anim-hail.gif", label: "Hail", caption: "fewer, rounder, faster" },
+    { src: "/gonna-rain/anim-rain.gif", width: 280, height: 350, label: "Heavy rain", caption: "streaks, angled, varied in length and speed" },
+    { src: "/gonna-rain/anim-snow.gif", width: 280, height: 350, label: "Snow", caption: "flakes drift and wobble instead of dropping straight" },
+    { src: "/gonna-rain/anim-hail.gif", width: 280, height: 350, label: "Hail", caption: "fewer, rounder, faster" },
   ]}
   caption="Hail is forced from the picker, so the headline behind it still reads from the rain scenario it was drawn over."
 />
@@ -80,8 +82,8 @@ This does feel a little overengineered, but it was becoming a real pain to look 
 <Figure
   cols={2}
   items={[
-    { src: "/gonna-rain/notif-copy-v1.png", label: "v1", caption: "every message ended in advice" },
-    { src: "/gonna-rain/notif-copy-v2.png", label: "v2", caption: "the advice cut, the facts kept" },
+    { src: "/gonna-rain/notif-copy-v1.png", width: 970, height: 522, label: "v1", caption: "every message ended in advice" },
+    { src: "/gonna-rain/notif-copy-v2.png", width: 970, height: 523, label: "v2", caption: "the advice cut, the facts kept" },
   ]}
 />
 
@@ -98,7 +100,7 @@ graph TD
     E --> F{"Is a minute wet?<br/>chance over 30%, intensity above zero"}
     F -->|"first wet minute ahead"| G["Rain-start push"]
     F -->|"first dry minute ahead"| H["Rain-end push"]
-    F -->|"activity token on file"| I["Live Activity content-state push"]
+    E -->|"activity token on file"| I["Live Activity content-state push"]
 ```
 
 1. The app registers a push token, your coordinates and your lead time. That's the whole record; there's no account.
@@ -123,8 +125,8 @@ I wanted to recreate that experience with the weather app. I think it's extremel
 
 <Figure
   items={[
-    { src: "/gonna-rain/la-v2-card.png", label: "v2", caption: "the app's own chart, miniaturised" },
-    { src: "/gonna-rain/la-v3-card.png", label: "v3", caption: "a thin track: white dot is now, cyan is rain" },
+    { src: "/gonna-rain/la-v2-card.png", width: 745, height: 460, label: "v2", caption: "the app's own chart, miniaturised" },
+    { src: "/gonna-rain/la-v3-card.png", width: 755, height: 320, label: "v3", caption: "a thin track: white dot is now, cyan is rain" },
   ]}
 />
 
@@ -137,10 +139,10 @@ Snow became the next natural weather phenomenon to focus on. The logic was built
 <Figure
   cols={2}
   items={[
-    { src: "/gonna-rain/snow-ice.png", label: "Ice", caption: "pale ice-blue — closest to the rain card" },
-    { src: "/gonna-rain/snow-frost.png", label: "Frost", caption: "near-white silver, least colour of the four" },
-    { src: "/gonna-rain/snow-periwinkle.png", label: "Periwinkle", caption: "cooler violet, most separable at a glance" },
-    { src: "/gonna-rain/snow-granular.png", label: "Granular", caption: "discrete flecks — snow as texture, not hue" },
+    { src: "/gonna-rain/snow-ice.png", width: 520, height: 266, label: "Ice", caption: "pale ice-blue — closest to the rain card" },
+    { src: "/gonna-rain/snow-frost.png", width: 520, height: 266, label: "Frost", caption: "near-white silver, least colour of the four" },
+    { src: "/gonna-rain/snow-periwinkle.png", width: 520, height: 268, label: "Periwinkle", caption: "cooler violet, most separable at a glance" },
+    { src: "/gonna-rain/snow-granular.png", width: 520, height: 268, label: "Granular", caption: "discrete flecks — snow as texture, not hue" },
   ]}
   caption="Round one: four directions, drawn at the real card's dimensions and type scale so the comparison would hold. I picked Frost, then spent two more rounds pushing it whiter until the blue was almost entirely out."
 />
@@ -149,8 +151,8 @@ If you're working on a project that demands that you draw things in your design,
 
 <Figure
   items={[
-    { src: "/gonna-rain/card-rain.png", label: "Rain", caption: "cyan track, droplet" },
-    { src: "/gonna-rain/card-wintry.png", label: "Wintry", caption: "near-white track, snowflake, tinted ring" },
+    { src: "/gonna-rain/card-rain.png", width: 710, height: 331, label: "Rain", caption: "cyan track, droplet" },
+    { src: "/gonna-rain/card-wintry.png", width: 710, height: 331, label: "Wintry", caption: "near-white track, snowflake, tinted ring" },
   ]}
   caption="The same card, rendered on device. Sleet, hail and mixed all share the wintry treatment."
 />

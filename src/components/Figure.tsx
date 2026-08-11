@@ -20,8 +20,10 @@ interface FigureItem {
   caption?: string;
   /** Render a dashed placeholder slot instead of an image. */
   pending?: string;
-  /** Constrain height — useful for tall phone screenshots. */
-  tall?: boolean;
+  /** Intrinsic pixel width of the file, so the browser can reserve the box. */
+  width?: number;
+  /** Intrinsic pixel height of the file. */
+  height?: number;
 }
 
 const COLS: Record<number, string> = {
@@ -59,7 +61,11 @@ export default function Figure({
                 <img
                   src={item.src}
                   alt={item.alt ?? item.caption ?? ""}
-                  className={`w-full ${item.tall ? "object-cover" : ""}`}
+                  width={item.width}
+                  height={item.height}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full"
                 />
               </div>
             )}
