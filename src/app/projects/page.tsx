@@ -11,7 +11,7 @@ const projects = [
     tagline:
       "This website. Migrated from Squarespace to Next.js on Vercel.",
     image: "/albertxu-com.png",
-    tags: ["Next.js", "Tailwind", "Vercel", "Resend"],
+    tags: ["Next.js", "Tailwind", "Vercel"],
   },
   {
     slug: "potter-journal",
