@@ -3,14 +3,16 @@
 // which reads it as UTC midnight. West of Greenwich that renders the previous
 // day, so /projects and /blog/<slug> disagreed about when the same post went up.
 //
-// The zone is pinned below rather than inherited from the runner: the bug only
-// shows at a negative UTC offset, so a suite that ran in the runner's own zone
-// would pass under UTC with the bug fully reintroduced.
+// The zone is pinned before ./date.ts is evaluated — hence the dynamic import,
+// which a static one would hoist above the assignment. The bug only shows at a
+// negative UTC offset, so a suite left in whatever zone the runner happens to
+// be in would pass under UTC with the off-by-one fully reintroduced.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { formatDate } from "./date.ts";
 
 process.env.TZ = "America/Los_Angeles";
+
+const { formatDate } = await import("./date.ts");
 
 // The date on content/blog/ai-docs-audit.mdx.
 const POST_DATE = "2026-04-23";

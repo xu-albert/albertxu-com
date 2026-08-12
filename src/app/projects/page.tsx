@@ -28,7 +28,7 @@ export default async function Projects() {
       </p>
 
       <div className="mt-10 space-y-4">
-        {entries.map((entry) => (
+        {entries.map((entry, i) => (
           <Link
             key={entry.href}
             href={entry.href}
@@ -39,7 +39,7 @@ export default async function Projects() {
                 <img
                   src={entry.image}
                   alt={entry.title}
-                  loading="lazy"
+                  loading={i === 0 ? "eager" : "lazy"}
                   decoding="async"
                   className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
                     entry.type === "blog"
