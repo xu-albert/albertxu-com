@@ -32,7 +32,9 @@ export default function About() {
                   Writing samples &rarr;
                 </a>
                 <a
-                  href="/contact"
+                  href="https://linkedin.com/in/albertwxu"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
                 >
                   Get in touch
@@ -146,7 +148,9 @@ export default function About() {
           Writing samples &rarr;
         </a>
         <a
-          href="/contact"
+          href="https://linkedin.com/in/albertwxu"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
         >
           Get in touch

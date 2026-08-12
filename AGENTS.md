@@ -6,10 +6,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Building and linting
 
-`npm run build` fails with `Missing API key. Pass it to the constructor new Resend(...)` unless
-`RESEND_API_KEY` is set — `src/app/api/contact/route.ts` constructs the Resend client at module
-scope, and page-data collection evaluates that module. Any placeholder value works for a build
-that does not send mail: `RESEND_API_KEY=re_placeholder npm run build`.
+`npm run build` needs no environment variables. The site has no API routes and no server-side
+secrets — everything under `src/app/` is statically prerendered.
 
 `npm run lint` is not clean on `main` (currently 1 error in `src/components/TableOfContents.tsx`
 plus several `no-img-element` warnings). Compare against the base commit before treating a lint
