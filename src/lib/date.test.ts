@@ -47,9 +47,8 @@ test("the pre-fix parse reproduces the off-by-one west of UTC", (t) => {
   assert.notEqual(naive(POST_DATE), formatDate(POST_DATE));
 });
 
-test("both call sites agree, whatever the zone", () => {
-  // /projects (feed card) and /blog/[slug] (post header) now share this one
-  // function, so the same input can only ever produce one string.
-  assert.equal(formatDate(POST_DATE), formatDate(POST_DATE));
-  assert.equal(formatDate(POST_DATE), EXPECTED);
+test("formatDate holds the calendar day across year and DST boundaries", () => {
+  assert.equal(formatDate("2026-01-01"), "January 1, 2026");
+  assert.equal(formatDate("2026-03-08"), "March 8, 2026");
+  assert.equal(formatDate("2026-11-01"), "November 1, 2026");
 });
