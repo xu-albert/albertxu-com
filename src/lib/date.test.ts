@@ -3,11 +3,14 @@
 // which reads it as UTC midnight. West of Greenwich that renders the previous
 // day, so /projects and /blog/<slug> disagreed about when the same post went up.
 //
-// Run under at least one negative-UTC-offset zone to exercise the bug:
-//   TZ=America/Los_Angeles node --test src/lib/date.test.ts
+// The zone is pinned below rather than inherited from the runner: the bug only
+// shows at a negative UTC offset, so a suite that ran in the runner's own zone
+// would pass under UTC with the bug fully reintroduced.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { formatDate } from "./date.ts";
+
+process.env.TZ = "America/Los_Angeles";
 
 // The date on content/blog/ai-docs-audit.mdx.
 const POST_DATE = "2026-04-23";
@@ -22,11 +25,6 @@ function naive(date: string): string {
   });
 }
 
-/** Minutes the runner's zone sits behind UTC at that date, if any. */
-function offsetMinutes(date: string): number {
-  return -new Date(`${date}T00:00:00`).getTimezoneOffset();
-}
-
 test("formatDate renders the calendar date it was given", () => {
   assert.equal(formatDate(POST_DATE), EXPECTED);
 });
@@ -38,11 +36,7 @@ test("formatDate is stable across every date in a month", () => {
   }
 });
 
-test("the pre-fix parse reproduces the off-by-one west of UTC", (t) => {
-  if (offsetMinutes(POST_DATE) >= 0) {
-    t.skip(`runner is at UTC${offsetMinutes(POST_DATE) / 60}, which never showed the bug`);
-    return;
-  }
+test("the pre-fix parse slides to the previous day", () => {
   assert.equal(naive(POST_DATE), "April 22, 2026");
   assert.notEqual(naive(POST_DATE), formatDate(POST_DATE));
 });

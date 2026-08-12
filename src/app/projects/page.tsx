@@ -39,8 +39,6 @@ export default async function Projects() {
                 <img
                   src={entry.image}
                   alt={entry.title}
-                  width={entry.imageWidth}
-                  height={entry.imageHeight}
                   loading="lazy"
                   decoding="async"
                   className={`transition-transform duration-500 ease-out group-hover:scale-105 ${

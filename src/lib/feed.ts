@@ -1,5 +1,4 @@
 import { getAllPosts } from "./blog";
-import { publicImageSize } from "./imageSize";
 
 export interface Project {
   slug: string;
@@ -60,9 +59,6 @@ interface BaseEntry {
   title: string;
   excerpt: string;
   image?: string;
-  /** Intrinsic pixel size of `image`, read off the file at build time. */
-  imageWidth?: number;
-  imageHeight?: number;
 }
 
 export type FeedEntry =
@@ -107,7 +103,6 @@ export async function getFeed(): Promise<FeedEntry[]> {
           `ORDER lists project '${entry.slug}', which has no entry in PROJECTS.`
         );
       }
-      const size = project.image ? publicImageSize(project.image) : undefined;
       return {
         type: "project",
         slug: project.slug,
@@ -115,8 +110,6 @@ export async function getFeed(): Promise<FeedEntry[]> {
         title: project.title,
         excerpt: project.tagline,
         image: project.image,
-        imageWidth: size?.width,
-        imageHeight: size?.height,
         tags: project.tags,
       };
     }
@@ -127,7 +120,6 @@ export async function getFeed(): Promise<FeedEntry[]> {
         `ORDER lists blog post '${entry.slug}', which has no file at content/blog/${entry.slug}.mdx.`
       );
     }
-    const cover = publicImageSize(post.meta.coverImage);
     return {
       type: "blog",
       slug: post.slug,
@@ -135,8 +127,6 @@ export async function getFeed(): Promise<FeedEntry[]> {
       title: post.meta.title,
       excerpt: post.meta.excerpt,
       image: post.meta.coverImage,
-      imageWidth: cover?.width,
-      imageHeight: cover?.height,
       date: post.meta.date,
       readingTime: post.readingTime,
     };
