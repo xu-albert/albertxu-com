@@ -7,6 +7,11 @@ export interface PostMeta {
   coverImage: string;
   excerpt: string;
   canonicalUrl?: string;
+  // Both optional and both only used by the case studies that moved here from
+  // /projects, so they keep the tech tags and the App Store link their project
+  // pages used to render. Posts without them render exactly as before.
+  tags?: string[];
+  links?: Record<string, string>;
 }
 
 export interface Post {

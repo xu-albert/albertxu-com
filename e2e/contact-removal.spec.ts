@@ -88,19 +88,20 @@ test.describe("contact form removal", () => {
     expect(offenders, "pages still linking to the removed contact form").toEqual([]);
   });
 
-  test("the albertxu.com project card and its detail page agree, with no Resend tag", async ({
+  test("the albertxu.com project card and its write-up agree, with no Resend tag", async ({
     page,
   }) => {
     const tagsOn = async (p: Page, scope: string) =>
       (await p.locator(scope).allTextContents()).map((t) => t.trim());
 
     await page.goto("/projects");
-    const cardTags = await tagsOn(page, 'a[href="/projects/albertxu-com"] span');
+    const cardTags = await tagsOn(page, 'a[href="/blog/albertxu-com"] span');
 
-    await page.goto("/projects/albertxu-com");
+    // The write-up is a blog post now; the showcase card still links to it.
+    await page.goto("/blog/albertxu-com");
     const detailTags = await tagsOn(page, "main span");
 
-    // The card and the detail page read from separate sources, so they can drift.
+    // The card and the write-up read from separate sources, so they can drift.
     for (const expected of ["Next.js", "Tailwind", "Vercel"]) {
       expect(cardTags).toContain(expected);
       expect(detailTags).toContain(expected);

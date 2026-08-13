@@ -4,6 +4,9 @@ export const metadata = {
   title: "Projects",
 };
 
+// A showcase of everything I've built. The long-form write-ups now live on the
+// blog, so those cards link out to the post rather than to a project page;
+// projects without a write-up keep their own page under /projects.
 const projects = [
   {
     slug: "albertxu-com",
@@ -12,6 +15,8 @@ const projects = [
       "This website. Migrated from Squarespace to Next.js on Vercel.",
     image: "/albertxu-com.png",
     tags: ["Next.js", "Tailwind", "Vercel"],
+    href: "/blog/albertxu-com",
+    linkLabel: "Case study",
   },
   {
     slug: "potter-journal",
@@ -19,6 +24,8 @@ const projects = [
     tagline: "A photo-first pottery tracker, live on the App Store.",
     image: "/potter-journal.png",
     tags: ["Flutter", "Dart", "Firebase"],
+    href: "/blog/potter-journal",
+    linkLabel: "Case study",
   },
   {
     slug: "lol-paparazzi",
@@ -28,6 +35,8 @@ const projects = [
     image: "/lol-paparazzi.png",
     imagePosition: "center" as const,
     tags: ["JavaScript", "Discord.js", "PostgreSQL", "Railway"],
+    href: "/projects/lol-paparazzi",
+    linkLabel: "Project",
   },
 ];
 
@@ -54,7 +63,7 @@ export default function Projects() {
         {projects.map((project) => (
           <Link
             key={project.slug}
-            href={`/projects/${project.slug}`}
+            href={project.href}
             className="project-card group flex items-center gap-5 overflow-hidden rounded-2xl border border-border bg-background p-4"
           >
             {project.image ? (
@@ -89,8 +98,8 @@ export default function Projects() {
                   ))}
                 </div>
               </div>
-              <span className="shrink-0 text-muted transition-all duration-200 group-hover:text-foreground group-hover:translate-x-0.5">
-                &rarr;
+              <span className="shrink-0 whitespace-nowrap text-sm text-muted transition-all duration-200 group-hover:text-foreground group-hover:translate-x-0.5">
+                {project.linkLabel} &rarr;
               </span>
             </div>
           </Link>

@@ -19,7 +19,7 @@ const highlights: Highlight[] = [
     date: "July 2026",
     title: "Potter Journal",
     description: "A photo-first pottery tracker, shipped to the App Store.",
-    href: "/projects/potter-journal",
+    href: "/blog/potter-journal",
     image: "/potter-journal.png",
   },
   {

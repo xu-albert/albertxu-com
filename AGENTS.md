@@ -13,6 +13,18 @@ secrets — everything under `src/app/` is statically prerendered.
 plus several `no-img-element` warnings). Compare against the base commit before treating a lint
 failure as something you introduced.
 
+## Where content lives
+
+Long-form writing — including case studies — is a blog post in `content/blog/`. `content/projects/`
+is for projects with no write-up; `/projects` is a showcase whose cards link to the write-up
+wherever it lives. `src/lib/blog.ts` validates blog metadata at build time (`date`, `excerpt`, and a
+`coverImage` that exists on disk); `src/lib/projects.ts` validates nothing.
+
+Two things do not update themselves when content moves: the `projects` array in
+`src/app/projects/page.tsx` and the `highlights` array in `src/components/WhatsNew.tsx`. Both
+templates set `dynamicParams = false`, so a stale entry is a 404 the build will not catch —
+`e2e/blog-ia.spec.ts` covers that.
+
 ## Maintaining this file
 
 Keep this file short and high-signal: only project knowledge useful to almost every future

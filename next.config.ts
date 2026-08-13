@@ -15,6 +15,22 @@ const nextConfig: NextConfig = {
         destination: "https://linkedin.com/in/albertwxu",
         permanent: false,
       },
+      // The Potter Journal and albertxu.com case studies are long-form writing,
+      // so they moved to the blog; /projects is now a showcase of the projects
+      // themselves. These two URLs are linked from the site updates page and
+      // are the ones most likely to be bookmarked or shared.
+      // Temporary (307) on purpose: this structure may be reorganized again, and
+      // a cached permanent redirect would outlive the decision.
+      {
+        source: "/projects/potter-journal",
+        destination: "/blog/potter-journal",
+        permanent: false,
+      },
+      {
+        source: "/projects/albertxu-com",
+        destination: "/blog/albertxu-com",
+        permanent: false,
+      },
     ];
   },
 };
