@@ -23,7 +23,8 @@ wherever it lives. `src/lib/blog.ts` validates blog metadata at build time (`dat
 Two things do not update themselves when content moves: the `projects` array in
 `src/app/projects/page.tsx` and the `highlights` array in `src/components/WhatsNew.tsx`. Both
 templates set `dynamicParams = false`, so a stale entry is a 404 the build will not catch —
-`e2e/blog-ia.spec.ts` covers that.
+`e2e/blog-ia.spec.ts` guards both by fetching every internal link on `/projects` and `/` and
+asserting a 200.
 
 ## Maintaining this file
 

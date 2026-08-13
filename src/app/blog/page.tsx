@@ -11,6 +11,9 @@ export default async function Blog() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-3xl font-bold tracking-tight">Blog</h1>
+      {/* TK: this subtitle predates the case studies that now sit under it — a
+          Flutter pottery app and a site rebuild aren't "writing, docs, and AI."
+          Left exactly as you wrote it; the wording is yours to decide. */}
       <p className="mt-2 text-muted">Thoughts on writing, docs, and AI.</p>
 
       <div className="mt-10 space-y-4">

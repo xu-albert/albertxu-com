@@ -41,25 +41,39 @@ test.describe("case studies on the blog, /projects as a showcase", () => {
     }
   });
 
-  test("every showcase card points at a page that exists", async ({
-    page,
-    request,
-  }) => {
-    // The showcase array is hand-maintained and `dynamicParams = false`, so a
-    // slug that drifts from disk links to a 404 that the build won't catch.
-    await page.goto("/projects");
-    const hrefs = await page
-      .locator("main a[href^='/']")
-      .evaluateAll((links) =>
-        links.map((a) => a.getAttribute("href")).filter((h): h is string => !!h)
-      );
+  // The two hand-maintained arrays — `projects` in src/app/projects/page.tsx
+  // and `highlights` in src/components/WhatsNew.tsx — are both `dynamicParams
+  // = false` templates, so a slug that drifts from disk links to a 404 the
+  // build won't catch. The crawl in contact-removal.spec.ts skips non-200
+  // pages rather than failing on them, so it doesn't cover this.
+  const linkSources = [
+    ["/projects", "showcase card", 3],
+    ["/", "home page link", 2],
+  ] as const;
 
-    expect(hrefs.length).toBeGreaterThanOrEqual(3);
-    for (const href of hrefs) {
-      const res = await request.get(href);
-      expect(res.status(), `${href} linked from /projects`).toBe(200);
-    }
-  });
+  for (const [source, kind, minLinks] of linkSources) {
+    test(`every ${kind} points at a page that exists`, async ({
+      page,
+      request,
+    }) => {
+      await page.goto(source);
+      const hrefs = await page
+        .locator("main a[href^='/']")
+        .evaluateAll((links) =>
+          links
+            .map((a) => a.getAttribute("href"))
+            .filter((h): h is string => !!h)
+        );
+
+      expect(hrefs.length, `internal links on ${source}`).toBeGreaterThanOrEqual(
+        minLinks
+      );
+      for (const href of hrefs) {
+        const res = await request.get(href);
+        expect(res.status(), `${href} linked from ${source}`).toBe(200);
+      }
+    });
+  }
 
   test("LoL Paparazzi keeps its own project page", async ({ page }) => {
     await page.goto("/projects/lol-paparazzi");
@@ -72,6 +86,27 @@ test.describe("case studies on the blog, /projects as a showcase", () => {
     for (const href of ["/blog/potter-journal", "/blog/albertxu-com"]) {
       await expect(page.locator(`a[href="${href}"]`)).toBeVisible();
     }
+  });
+
+  test("a case study keeps the screenshot its project page showed", async ({
+    page,
+  }) => {
+    // The hero sits outside <article>, so this can't be satisfied by an image
+    // that happens to be in the body copy.
+    await page.goto("/blog/potter-journal");
+    await expect(
+      page.locator('main > div > img[src="/potter-journal.png"]')
+    ).toBeVisible();
+  });
+
+  test("a post that declares no hero still renders without one", async ({
+    page,
+  }) => {
+    // ai-docs-audit has a coverImage for its index card, but that cover is a
+    // notes photo, not a hero. Its only images are inside the body.
+    await page.goto("/blog/ai-docs-audit");
+    await expect(page.locator("main > div > img")).toHaveCount(0);
+    await expect(page.locator("article img").first()).toBeVisible();
   });
 
   test("the Potter Journal App Store link survived the move", async ({ page }) => {
