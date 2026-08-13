@@ -75,6 +75,29 @@ test.describe("case studies on the blog, /projects as a showcase", () => {
     });
   }
 
+  // The write-ups moved, but the tabs did not: Projects and Blog are still two
+  // separate destinations. Whether to merge or rename them is a separate call.
+  test("the nav still has both a Projects and a Blog tab", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/");
+
+    for (const [label, href] of [
+      ["Projects", "/projects"],
+      ["Blog", "/blog"],
+    ]) {
+      // The header renders a desktop and a mobile copy of the same list.
+      const tab = page
+        .locator("header")
+        .getByRole("link", { name: label, exact: true })
+        .first();
+      await expect(tab, `${label} tab in the nav`).toBeVisible();
+      await expect(tab).toHaveAttribute("href", href);
+      expect((await request.get(href)).status(), `${href}`).toBe(200);
+    }
+  });
+
   test("LoL Paparazzi keeps its own project page", async ({ page }) => {
     await page.goto("/projects/lol-paparazzi");
     await expect(page.locator("h1")).toContainText("LoL Paparazzi");

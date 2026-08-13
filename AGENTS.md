@@ -17,8 +17,9 @@ failure as something you introduced.
 
 Long-form writing — including case studies — is a blog post in `content/blog/`. `content/projects/`
 is for projects with no write-up; `/projects` is a showcase whose cards link to the write-up
-wherever it lives. `src/lib/blog.ts` validates blog metadata at build time (`date`, `excerpt`, and a
-`coverImage` that exists on disk); `src/lib/projects.ts` validates nothing.
+wherever it lives. `src/lib/blog.ts` validates blog metadata at build time (required fields, the
+`date` format, and every image path resolving inside `public/`); `src/lib/projects.ts` validates
+nothing.
 
 Two things do not update themselves when content moves: the `projects` array in
 `src/app/projects/page.tsx` and the `highlights` array in `src/components/WhatsNew.tsx`. Both
