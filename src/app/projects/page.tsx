@@ -1,26 +1,50 @@
 import Link from "next/link";
-import { getFeed } from "@/lib/feed";
 
 export const metadata = {
   title: "Projects",
 };
 
-function formatDate(date: string): string {
-  return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+const projects = [
+  {
+    slug: "albertxu-com",
+    title: "albertxu.com",
+    tagline:
+      "This website. Migrated from Squarespace to Next.js on Vercel.",
+    image: "/albertxu-com.png",
+    tags: ["Next.js", "Tailwind", "Vercel"],
+  },
+  {
+    slug: "potter-journal",
+    title: "Potter Journal",
+    tagline: "A photo-first pottery tracker, live on the App Store.",
+    image: "/potter-journal.png",
+    tags: ["Flutter", "Dart", "Firebase"],
+  },
+  {
+    slug: "gonna-rain",
+    title: "Gonna Rain?",
+    tagline:
+      "Minute-by-minute rain alerts for iOS, live on the App Store.",
+    image: "/gonna-rain.png",
+    tags: ["Swift", "SwiftUI", "WeatherKit", "Cloudflare Workers"],
+  },
+  {
+    slug: "lol-paparazzi",
+    title: "LoL Paparazzi",
+    tagline:
+      "A Discord bot that tracks your friends' ranked games and lets you bet on the outcome.",
+    image: "/lol-paparazzi.png",
+    imagePosition: "center" as const,
+    tags: ["JavaScript", "Discord.js", "PostgreSQL", "Railway"],
+  },
+];
 
-export default async function Projects() {
-  const entries = await getFeed();
-
+export default function Projects() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
       <p className="mt-2 text-muted">
-        Things I&apos;ve built and written about.{" "}
+        Things I&apos;ve built.{" "}
         <a
           href="https://github.com/xu-albert"
           target="_blank"
@@ -35,22 +59,18 @@ export default async function Projects() {
       </p>
 
       <div className="mt-10 space-y-4">
-        {entries.map((entry) => (
+        {projects.map((project) => (
           <Link
-            key={entry.href}
-            href={entry.href}
+            key={project.slug}
+            href={`/projects/${project.slug}`}
             className="project-card group flex items-center gap-5 overflow-hidden rounded-2xl border border-border bg-background p-4"
           >
-            {entry.image ? (
+            {project.image ? (
               <div className="flex h-24 w-40 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-border/20">
                 <img
-                  src={entry.image}
-                  alt={entry.title}
-                  className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
-                    entry.type === "blog"
-                      ? "h-full w-full object-cover"
-                      : "max-h-full max-w-full object-contain"
-                  }`}
+                  src={project.image}
+                  alt={project.title}
+                  className="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               </div>
             ) : (
@@ -60,34 +80,22 @@ export default async function Projects() {
             )}
             <div className="flex flex-1 items-center gap-4">
               <div className="flex-1">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
-                  {entry.type === "blog" ? (
-                    <>
-                      <span className="font-medium text-foreground/70">Blog</span>{" "}
-                      · {formatDate(entry.date)} · {entry.readingTime} min read
-                    </>
-                  ) : (
-                    <span className="font-medium text-foreground/70">Project</span>
-                  )}
-                </p>
-                <h2 className="mt-1 text-lg font-semibold leading-snug tracking-tight">
-                  {entry.title}
+                <h2 className="text-lg font-semibold tracking-tight">
+                  {project.title}
                 </h2>
-                <p className="mt-1 text-sm leading-relaxed text-muted line-clamp-2">
-                  {entry.excerpt}
+                <p className="mt-1 text-sm leading-relaxed text-muted">
+                  {project.tagline}
                 </p>
-                {entry.type === "project" && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {entry.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-foreground/[0.06] px-2.5 py-0.5 text-xs font-medium text-muted"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-foreground/[0.06] px-2.5 py-0.5 text-xs font-medium text-muted"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
               <span className="shrink-0 text-muted transition-all duration-200 group-hover:text-foreground group-hover:translate-x-0.5">
                 &rarr;
