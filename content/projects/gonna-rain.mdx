@@ -1,0 +1,141 @@
+export const metadata = {
+  title: "Gonna Rain?",
+  tagline:
+    "Minute-by-minute rain alerts for iOS, live on the App Store.",
+  image: "/gonna-rain.png",
+  tags: ["Swift", "SwiftUI", "WeatherKit", "Cloudflare Workers"],
+  links: {
+    "App Store": "https://apps.apple.com/us/app/gonna-rain/id6759902655",
+  },
+};
+
+import RainBuildTimeline from "@/components/RainBuildTimeline";
+import Figure from "@/components/Figure";
+
+## Background
+
+Even on rainy days, there are moments when the rain lets up for half an hour, and that's enough time to walk the dog quickly when otherwise you might not get the chance to. Granular weather updates are already available in my area through the native iOS weather app, but I wanted more active notifications to announce when exactly rain would stop, instead of having me obsessively check my phone every 10 minutes.
+
+Luckily, the same weather data is available in Apple's WeatherKit. All I had to do was make a nice-looking application that served the notifications that I wanted.
+
+## What it does
+
+`Gonna Rain?` shows you the next hour minute-by-minute, the next twelve hours, and the week — then gets out of the way. The background is the weather: it darkens when it rains, goes navy and speckled when it snows.
+
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/app-rain.png", label: "Raining", caption: "hero flips to time-until-it-stops" },
+    { src: "/gonna-rain/app-clear.png", label: "Clear", caption: "the week, when there's nothing to say" },
+    { src: "/gonna-rain/app-snow.png", label: "Snowing", caption: "night gradient, falling flakes" },
+  ]}
+/>
+
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/la-lockscreen.png", label: "Lock screen" },
+    { src: "/gonna-rain/la-island-compact.png", label: "Dynamic Island" },
+    { src: "/gonna-rain/la-island-expanded.png", label: "Expanded" },
+  ]}
+/>
+
+## The build
+
+<RainBuildTimeline />
+
+Just building the basic weather function for the app was quite easy — I think anyone with experience building apps using AI can probably one-shot this in a matter of minutes. What was hard was determining the notification logic, asking for correct permissions, and making it look nice.
+
+### Fun animations
+
+It took a lot of trial and error to get the animations in a nice place. Claude did most of the heavy lifting with implementation here, but it still took a while to settle on the animation style and overall design.
+
+<Figure
+  items={[
+    { src: "/gonna-rain/debug-picker.png", label: "Debug picker", caption: "force any weather type and time of day while testing" },
+  ]}
+/>
+
+Here are example animations that I finally landed on:
+
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/anim-rain.gif", label: "Rain" },
+    { src: "/gonna-rain/anim-snow.gif", label: "Snow" },
+    { src: "/gonna-rain/anim-hail.gif", label: "Hail" },
+  ]}
+/>
+
+### Notifications
+
+The native iOS app DOES tell you when it's going to rain. But by the time I check on the weather, sometimes the weather has already changed, and I'm not able to plan effectively. I also have a threshold for rain — maybe I'm okay with a little rain, but I'm not happy to go out when it's pouring outside.
+
+This does feel a little overengineered, but it was becoming a real pain to look outside the window to see if it was still raining or not. And even when you look outside, sometimes it's hard to see actual raindrops falling.
+
+<Figure
+  cols={2}
+  items={[
+    { src: "/gonna-rain/notif-copy-v1.png", label: "v1", caption: "every message ended in advice" },
+    { src: "/gonna-rain/notif-copy-v2.png", label: "v2", caption: "the advice cut, the facts kept" },
+  ]}
+/>
+
+I wanted my notifications to spam me repeatedly each time rain started and stopped. TK insert the system design explanations for how we wired up notifications
+
+### Live notifications
+
+I really like how apps like DoorDash and Lyft structure their live notifications. There's a progress bar for when something is about to be done.
+
+
+
+<Figure
+  cols={2}
+  items={[
+    { src: "/gonna-rain/ref-doordash.jpg", label: "DoorDash" },
+    { src: "/gonna-rain/ref-lyft.jpg", label: "Lyft" },
+  ]}
+  caption="The design language I borrowed from — the track, the countdown, the one line of context."
+/>
+
+I wanted to recreate that experience with the weather app. I think it's extremely useful to reflect that granular rain information on the lock screen, so I know exactly when I'm able to step out.
+
+<Figure
+  items={[
+    { src: "/gonna-rain/la-v2-card.png", label: "v2", caption: "the app's own chart, miniaturised" },
+    { src: "/gonna-rain/la-v3-card.png", label: "v3", caption: "a thin track: white dot is now, cyan is rain" },
+  ]}
+/>
+
+I decided eventually to use a flat bar, similar to conventional live activity notifications. The chart, while informative, makes the lock screen too cluttered.
+
+### Snow (1.1.1)
+
+Snow became the next natural weather phenomenon to focus on. The logic was built out already, but I wanted it to look cool.
+
+<Figure
+  cols={2}
+  items={[
+    { src: "/gonna-rain/snow-ice.png", label: "Ice", caption: "pale ice-blue — closest to the rain card" },
+    { src: "/gonna-rain/snow-frost.png", label: "Frost", caption: "near-white silver, least colour of the four" },
+    { src: "/gonna-rain/snow-periwinkle.png", label: "Periwinkle", caption: "cooler violet, most separable at a glance" },
+    { src: "/gonna-rain/snow-granular.png", label: "Granular", caption: "discrete flecks — snow as texture, not hue" },
+  ]}
+/>
+
+If you're working on a project that demands that you draw things in your design, I encourage you to ask your agent to spin up multiple designs, then output an HTML page for you to pick and choose something. I unfortunately wasn't using it for this project, but a tool like [Lavish](https://github.com/kunchenguid/lavish-axi) is extremely useful as a visual-based option for providing feedback and choosing between designs.
+
+<Figure
+  items={[
+    { src: "/gonna-rain/card-rain.png", label: "Rain", caption: "cyan track, droplet" },
+    { src: "/gonna-rain/card-wintry.png", label: "Wintry", caption: "near-white track, snowflake, tinted ring" },
+  ]}
+/>
+
+## Final thoughts
+
+A weather app is a very classic beginner project used for beginner programmers to make a fullstack app. It's not something I really considered doing as an exercise, but it was a great way to practice agentic engineering, and doubles as a tool that's quite useful for rainy days.
+
+I think the best takeaway from this project is learning how to think about designing with AI. Previously, I would specify my design specifications up front with Claude, and tweak the design iteratively. Now, my inclination is to spin up several designs and choose my favorite one. Iterations are more about choosing between options, not fixing in on one.
+
+If you want to know whether it's gonna rain, [it's on the App Store](https://apps.apple.com/us/app/gonna-rain/id6759902655).
