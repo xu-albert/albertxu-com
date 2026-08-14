@@ -31,7 +31,14 @@ Luckily, the same weather data is available in Apple's WeatherKit. All I had to 
   ]}
 />
 
-{/* TK insert live activities screenshots here as well. you can use the screenshots in the will-it-rain repo. */}
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/la-lockscreen.png", label: "Lock screen" },
+    { src: "/gonna-rain/la-island-compact.png", label: "Dynamic Island" },
+    { src: "/gonna-rain/la-island-expanded.png", label: "Expanded" },
+  ]}
+/>
 
 ## The build
 
@@ -43,11 +50,22 @@ Just building the basic weather function for the app was quite easy — I think 
 
 It took a lot of trial and error to get the animations in a nice place. Claude did most of the heavy lifting with implementation here, but it still took a while to settle on the animation style and overall design.
 
-{/* TK insert debugging screen with pills of different weather options and time of day */}
+<Figure
+  items={[
+    { src: "/gonna-rain/debug-picker.png", label: "Debug picker", caption: "force any weather type and time of day while testing" },
+  ]}
+/>
 
 Here are example animations that I finally landed on:
 
-{/* TK insert gif of heavy rain, snow, and hail */}
+<Figure
+  cols={3}
+  items={[
+    { src: "/gonna-rain/anim-rain.gif", label: "Rain" },
+    { src: "/gonna-rain/anim-snow.gif", label: "Snow" },
+    { src: "/gonna-rain/anim-hail.gif", label: "Hail" },
+  ]}
+/>
 
 ### Notifications
 
@@ -74,8 +92,8 @@ I really like how apps like DoorDash and Lyft structure their live notifications
 <Figure
   cols={2}
   items={[
-    { pending: "Reference: DoorDash Live Activity\n/gonna-rain/ref-doordash.png" },
-    { pending: "Reference: Lyft Live Activity\n/gonna-rain/ref-lyft.png" },
+    { src: "/gonna-rain/ref-doordash.jpg", label: "DoorDash" },
+    { src: "/gonna-rain/ref-lyft.jpg", label: "Lyft" },
   ]}
   caption="The design language I borrowed from — the track, the countdown, the one line of context."
 />
