@@ -16,7 +16,7 @@ interface Highlight {
 const highlights: Highlight[] = [
   {
     kind: "Case study",
-    date: "July 2026",
+    date: "August 2026",
     title: "Gonna Rain?",
     description: "Minute-by-minute rain alerts, and the rejection that stalled them.",
     href: "/projects/gonna-rain",
