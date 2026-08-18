@@ -1,8 +1,83 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
+// Built from what the production bundle actually loads, not from a template:
+//
+//   script-src   Next.js emits a dozen inline <script> tags per page to carry
+//                the Flight payload, and their content changes every build, so
+//                neither a hash list nor a nonce is available to a fully static
+//                site (a nonce would force every route to render dynamically).
+//                'unsafe-inline' is the price of staying prerendered. The
+//                Vercel analytics/speed-insights loaders resolve to same-origin
+//                /_vercel/... paths in production; va.vercel-scripts.com is the
+//                fallback those packages use, so it is allowed explicitly.
+//   style-src    Two inline-style sources: GFM table alignment renders as
+//                style="text-align:center", and mermaid injects a <style>
+//                element inside the SVG it hands to Mermaid.tsx.
+//   font-src     next/font/google self-hosts Geist at build time -- the build
+//                output contains no fonts.gstatic.com reference.
+//   img-src      Every image is local; data: is allowed for mermaid, which can
+//                emit data-URI images inside a rendered diagram.
+//   connect-src  Analytics beacons post to same-origin /_vercel/... endpoints;
+//                the two Vercel hosts cover the packages' fallback endpoints.
+//
+// Everything else is denied outright: there are no frames, no plugins, no
+// workers, and no forms anywhere in the app.
+const csp = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "frame-src 'none'",
+  "form-action 'self'",
+  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "media-src 'self'",
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  // Response security headers. There is no server-side surface here -- every
+  // route is prerendered at build time -- so these are the whole defense, and
+  // they are cheap: nothing on the site loads a cross-origin script, font,
+  // style, frame or image. Read the CSP notes above before relaxing anything.
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: csp },
+          // Stop browsers second-guessing our Content-Type. Matters most for
+          // public/*.svg and public/*.pdf, which Vercel serves inline.
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // frame-ancestors above is the real control; this is the fallback
+          // for anything that still only understands X-Frame-Options.
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Nothing here asks for a device, so deny by default.
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          // Vercel already sends HSTS; this adds includeSubDomains. Deliberately
+          // no `preload` -- that is a slow-to-undo commitment for every current
+          // and future albertxu.com subdomain.
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains",
+          },
+        ],
+      },
+    ];
+  },
+
   // The contact page and its form are gone; LinkedIn is the way to reach me.
   // Old inbound links and search results still point at /contact, so send
   // them where the home page's "Get in touch" now goes instead of 404ing.

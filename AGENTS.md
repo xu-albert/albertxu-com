@@ -13,6 +13,13 @@ secrets — everything under `src/app/` is statically prerendered.
 plus several `no-img-element` warnings). Compare against the base commit before treating a lint
 failure as something you introduced.
 
+## Security headers
+
+A locked-down CSP and the other response headers are defined in `next.config.ts` (`headers()`).
+The CSP is derived from what the production bundle actually loads, so **adding any third-party
+script, style, font, image, frame or fetch target means updating it** — read the comment block
+above the `csp` constant first, then re-check `.next/` after a build.
+
 ## Maintaining this file
 
 Keep this file short and high-signal: only project knowledge useful to almost every future
