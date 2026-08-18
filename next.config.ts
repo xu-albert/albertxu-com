@@ -23,23 +23,63 @@ import type { NextConfig } from "next";
 //
 // Everything else is denied outright: there are no frames, no plugins, no
 // workers, and no forms anywhere in the app.
+//
+// The one exception is the Vercel Toolbar, which Vercel injects into preview
+// deployments. It loads https://vercel.live/_next-live/feedback/feedback.js,
+// opens a vercel.live iframe and a Pusher websocket, and pulls its own styles,
+// fonts and avatars -- every one of which the policy above blocks. Given the
+// choice between losing the toolbar, loosening the policy everywhere, or
+// loosening it only off production, the ruling was the third: preview gets a
+// working toolbar, production is deliberately left byte-for-byte as tight as
+// it was before this allowance existed. The gate is VERCEL_ENV !== production,
+// so local `next dev`/`next start` are covered too. Source lists are Vercel's
+// documented CSP requirements for the toolbar, not guesses:
+// https://vercel.com/docs/vercel-toolbar/managing-toolbar
+const isProduction = process.env.VERCEL_ENV === "production";
+const toolbar = (...sources: string[]) => (isProduction ? [] : sources);
+
 const csp = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "frame-ancestors 'none'",
-  "frame-src 'none'",
-  "form-action 'self'",
-  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
-  "font-src 'self'",
-  "media-src 'self'",
-  "worker-src 'self'",
-  "manifest-src 'self'",
-  "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
-  "upgrade-insecure-requests",
-].join("; ");
+  ["default-src", "'self'"],
+  ["base-uri", "'self'"],
+  ["object-src", "'none'"],
+  ["frame-ancestors", "'none'"],
+  // 'none' cannot be combined with a real source, so this directive swaps
+  // wholesale rather than appending.
+  ["frame-src", ...(isProduction ? ["'none'"] : ["https://vercel.live"])],
+  ["form-action", "'self'"],
+  [
+    "script-src",
+    "'self'",
+    "'unsafe-inline'",
+    "https://va.vercel-scripts.com",
+    ...toolbar("https://vercel.live"),
+  ],
+  ["style-src", "'self'", "'unsafe-inline'", ...toolbar("https://vercel.live")],
+  [
+    "img-src",
+    "'self'",
+    "data:",
+    ...toolbar("https://vercel.live", "https://vercel.com", "blob:"),
+  ],
+  [
+    "font-src",
+    "'self'",
+    ...toolbar("https://vercel.live", "https://assets.vercel.com"),
+  ],
+  ["media-src", "'self'"],
+  ["worker-src", "'self'"],
+  ["manifest-src", "'self'"],
+  [
+    "connect-src",
+    "'self'",
+    "https://va.vercel-scripts.com",
+    "https://vitals.vercel-insights.com",
+    ...toolbar("https://vercel.live", "wss://ws-us3.pusher.com"),
+  ],
+  ["upgrade-insecure-requests"],
+]
+  .map((directive) => directive.join(" "))
+  .join("; ");
 
 const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
