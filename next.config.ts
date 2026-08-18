@@ -31,12 +31,28 @@ import type { NextConfig } from "next";
 // choice between losing the toolbar, loosening the policy everywhere, or
 // loosening it only off production, the ruling was the third: preview gets a
 // working toolbar, production is deliberately left byte-for-byte as tight as
-// it was before this allowance existed. The gate is VERCEL_ENV !== production,
-// so local `next dev`/`next start` are covered too. Source lists are Vercel's
-// documented CSP requirements for the toolbar, not guesses:
+// it was before this allowance existed. Source lists are Vercel's documented
+// CSP requirements for the toolbar, not guesses:
 // https://vercel.com/docs/vercel-toolbar/managing-toolbar
-const isProduction = process.env.VERCEL_ENV === "production";
-const toolbar = (...sources: string[]) => (isProduction ? [] : sources);
+//
+// The gate is an allowlist of the two environments that actually get a
+// toolbar, and it is deliberately fail-closed: an undefined, empty or
+// unrecognised VERCEL_ENV yields the tight production policy. Testing
+// `!== "production"` would be the bug -- Vercel only populates VERCEL_ENV when
+// the project has "Enable access to System Environment Variables" checked, so
+// an absent value is not evidence that a build is non-production, and a
+// fail-open gate would ship the loosened policy to the live site. preview,
+// development and production are the only values Vercel documents:
+// https://vercel.com/docs/environment-variables/system-environment-variables
+//
+// Accepted consequence of that ruling, not an oversight to undo: local
+// `next dev`/`next start` see no VERCEL_ENV and so get the production policy.
+// Nothing injects the toolbar locally, so there is nothing there to unblock --
+// do not add a NODE_ENV check, an .env default or any other escape hatch.
+const isToolbarEnvironment =
+  process.env.VERCEL_ENV === "preview" ||
+  process.env.VERCEL_ENV === "development";
+const toolbar = (...sources: string[]) => (isToolbarEnvironment ? sources : []);
 
 const csp = [
   ["default-src", "'self'"],
@@ -45,7 +61,10 @@ const csp = [
   ["frame-ancestors", "'none'"],
   // 'none' cannot be combined with a real source, so this directive swaps
   // wholesale rather than appending.
-  ["frame-src", ...(isProduction ? ["'none'"] : ["https://vercel.live"])],
+  [
+    "frame-src",
+    ...(isToolbarEnvironment ? ["https://vercel.live"] : ["'none'"]),
+  ],
   ["form-action", "'self'"],
   [
     "script-src",
