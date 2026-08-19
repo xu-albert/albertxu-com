@@ -63,12 +63,6 @@ const sections = [
         title: "What is EY GigNow?",
         href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
       },
-      {
-        title: "Sourcing agency documentation",
-        description:
-          "EY works exclusively with agencies that have established formal contractual agreements. This is a guide for those sourcing agencies.",
-        href: "/agency_portal_docs_for_recruiter.pdf",
-      },
     ],
   },
   {
