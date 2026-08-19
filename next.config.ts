@@ -31,8 +31,11 @@ import type { NextConfig } from "next";
 // choice between losing the toolbar, loosening the policy everywhere, or
 // loosening it only off production, the ruling was the third: preview gets a
 // working toolbar, production is deliberately left byte-for-byte as tight as
-// it was before this allowance existed. Source lists are Vercel's documented
-// CSP requirements for the toolbar, not guesses:
+// it was before this allowance existed. The preview half of that only comes
+// alive once Vercel actually populates VERCEL_ENV, which requires the
+// project's "Automatically expose System Environment Variables" setting to be
+// switched on; it is being enabled for this project. Source lists are Vercel's
+// documented CSP requirements for the toolbar, not guesses:
 // https://vercel.com/docs/vercel-toolbar/managing-toolbar
 //
 // The gate is an allowlist of the two environments that actually get a
