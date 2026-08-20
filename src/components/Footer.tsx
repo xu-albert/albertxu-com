@@ -16,7 +16,7 @@ export default function Footer() {
         </span>
         <div className="flex gap-4">
           <a
-            href="https://linkedin.com/in/albertwxu"
+            href="https://www.linkedin.com/in/albertxu451/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
