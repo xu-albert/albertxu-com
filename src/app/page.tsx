@@ -37,7 +37,15 @@ export default function About() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
                 >
-                  Get in touch
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/xu-albert"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
+                >
+                  GitHub
                 </a>
               </div>
             </div>
@@ -146,14 +154,6 @@ export default function About() {
           className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#333]"
         >
           Writing samples &rarr;
-        </a>
-        <a
-          href="https://www.linkedin.com/in/albertxu451/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
-        >
-          Get in touch
         </a>
       </div>
 

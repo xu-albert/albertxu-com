@@ -2,6 +2,11 @@ import { test, expect, type Page } from "@playwright/test";
 
 const LINKEDIN = "https://linkedin.com/in/albertwxu";
 
+// The profiles the site itself links to (the /contact redirect above is a
+// separate, older target).
+const PROFILE_LINKEDIN = "https://www.linkedin.com/in/albertxu451/";
+const PROFILE_GITHUB = "https://github.com/xu-albert";
+
 test.describe("contact form removal", () => {
   test("/contact temporarily redirects to LinkedIn instead of 404ing", async ({
     request,
@@ -44,14 +49,24 @@ test.describe("contact form removal", () => {
     await expect(page.locator("header").getByRole("link", { name: "Contact" })).toHaveCount(0);
   });
 
-  test("both home page CTAs open LinkedIn in a new tab", async ({ page }) => {
+  test("the home page hero links to LinkedIn and GitHub, with no Get in touch CTA", async ({
+    page,
+  }) => {
     await page.goto("/");
-    const ctas = page.getByRole("link", { name: /get in touch/i });
-    await expect(ctas).toHaveCount(2);
 
-    for (const cta of await ctas.all()) {
-      await expect(cta).toHaveAttribute("href", LINKEDIN);
-      // Matches how the footer LinkedIn link is written.
+    // The "Get in touch" CTAs were replaced on purpose: the hero now points
+    // straight at the two profiles instead.
+    await expect(page.getByRole("link", { name: /get in touch/i })).toHaveCount(0);
+
+    const hero = page.locator("section").first();
+    for (const [name, href] of [
+      ["LinkedIn", PROFILE_LINKEDIN],
+      ["GitHub", PROFILE_GITHUB],
+    ] as const) {
+      const cta = hero.getByRole("link", { name });
+      await expect(cta).toHaveCount(1);
+      await expect(cta).toHaveAttribute("href", href);
+      // Matches how the footer social links are written.
       await expect(cta).toHaveAttribute("target", "_blank");
       await expect(cta).toHaveAttribute("rel", "noopener noreferrer");
     }
