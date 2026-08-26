@@ -1,4 +1,5 @@
 import WhatsNew from "@/components/WhatsNew";
+import { GitHubIcon, LinkedInIcon } from "@/components/SocialIcons";
 
 export default function About() {
   return (
@@ -37,6 +38,7 @@ export default function About() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
                 >
+                  <LinkedInIcon />
                   LinkedIn
                 </a>
                 <a
@@ -45,6 +47,7 @@ export default function About() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
                 >
+                  <GitHubIcon />
                   GitHub
                 </a>
               </div>

@@ -69,6 +69,12 @@ test.describe("contact form removal", () => {
       // Matches how the footer social links are written.
       await expect(cta).toHaveAttribute("target", "_blank");
       await expect(cta).toHaveAttribute("rel", "noopener noreferrer");
+      // Each pill carries the same mark the footer link uses, and the icon is
+      // decorative, so the link's accessible name stays the label alone.
+      const icon = cta.locator("svg");
+      await expect(icon).toHaveCount(1);
+      await expect(icon).toHaveAttribute("aria-hidden", "true");
+      await expect(cta).toHaveAccessibleName(name);
     }
   });
 
