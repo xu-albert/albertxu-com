@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-## Building and linting
+## Building, linting, and testing
 
 `npm run build` needs no environment variables. The site has no API routes and no server-side
 secrets — everything under `src/app/` is statically prerendered.
@@ -12,6 +12,9 @@ secrets — everything under `src/app/` is statically prerendered.
 `npm run lint` is not clean on `main` (currently 1 error in `src/components/TableOfContents.tsx`
 plus several `no-img-element` warnings). Compare against the base commit before treating a lint
 failure as something you introduced.
+
+`npm test` runs the Playwright e2e suite in `e2e/` headlessly, against a production build it starts
+itself (see `playwright.config.ts`) — no dev server or browser session needs to be running first.
 
 ## Security headers
 

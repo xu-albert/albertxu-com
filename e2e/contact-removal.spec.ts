@@ -78,6 +78,47 @@ test.describe("contact form removal", () => {
     }
   });
 
+  test.describe("on a phone-width viewport", () => {
+    test.use({ viewport: { width: 375, height: 667 } });
+
+    test("the hero pills wrap onto a second row instead of breaking their labels", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      const pills = page.locator("section").first().locator("a");
+      await expect(pills).toHaveCount(3);
+
+      const boxes = await pills.evaluateAll((links) =>
+        links.map((a) => {
+          const box = a.getBoundingClientRect();
+          const style = getComputedStyle(a);
+          const lineHeight = parseFloat(style.lineHeight);
+          const twoLines =
+            2 * lineHeight +
+            parseFloat(style.paddingTop) +
+            parseFloat(style.paddingBottom) +
+            parseFloat(style.borderTopWidth) +
+            parseFloat(style.borderBottomWidth);
+          return {
+            label: a.textContent?.trim() ?? "",
+            top: box.top,
+            right: box.right,
+            height: box.height,
+            twoLines,
+          };
+        })
+      );
+
+      for (const pill of boxes) {
+        // A label that broke onto a second line makes its pill two lines of text tall.
+        expect(pill.height, `"${pill.label}" should stay on one line`).toBeLessThan(pill.twoLines);
+        expect(pill.right, `"${pill.label}" should fit inside the viewport`).toBeLessThanOrEqual(375);
+      }
+      // Three pills are wider than a 375px content box, so the row has to wrap.
+      expect(new Set(boxes.map((pill) => Math.round(pill.top))).size).toBeGreaterThan(1);
+    });
+  });
+
   test("no page on the site still links to /contact", async ({ page, baseURL }) => {
     const visited = new Set<string>(["/"]);
     const queue = ["/"];
