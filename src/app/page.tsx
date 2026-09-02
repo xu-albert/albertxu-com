@@ -1,4 +1,5 @@
 import WhatsNew from "@/components/WhatsNew";
+import { GitHubIcon, LinkedInIcon, SubstackIcon } from "@/components/SocialIcons";
 
 export default function About() {
   return (
@@ -24,7 +25,7 @@ export default function About() {
               <p className="mt-5 text-lg leading-relaxed text-muted">
                 Experience writing software docs at C3 AI, AWS, and EY.
               </p>
-              <div className="mt-8 flex gap-4 max-sm:justify-center">
+              <div className="mt-8 flex flex-wrap gap-4 max-sm:justify-center">
                 <a
                   href="/portfolio"
                   className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#333]"
@@ -37,7 +38,26 @@ export default function About() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
                 >
-                  Get in touch
+                  <LinkedInIcon />
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/xu-albert"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
+                >
+                  <GitHubIcon />
+                  GitHub
+                </a>
+                <a
+                  href="https://albertwxu.substack.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
+                >
+                  <SubstackIcon />
+                  Substack
                 </a>
               </div>
             </div>
@@ -139,23 +159,6 @@ export default function About() {
           Let&apos;s connect about opportunities or chat about writing.
         </p>
       </section>
-
-      <div className="mt-14 flex gap-4">
-        <a
-          href="/portfolio"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#333]"
-        >
-          Writing samples &rarr;
-        </a>
-        <a
-          href="https://www.linkedin.com/in/albertxu451/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
-        >
-          Get in touch
-        </a>
-      </div>
 
       </div>
     </div>
