@@ -6,6 +6,7 @@ const LINKEDIN = "https://linkedin.com/in/albertwxu";
 // separate, older target).
 const PROFILE_LINKEDIN = "https://www.linkedin.com/in/albertxu451/";
 const PROFILE_GITHUB = "https://github.com/xu-albert";
+const PROFILE_SUBSTACK = "https://albertwxu.substack.com/";
 
 test.describe("contact form removal", () => {
   test("/contact temporarily redirects to LinkedIn instead of 404ing", async ({
@@ -49,7 +50,7 @@ test.describe("contact form removal", () => {
     await expect(page.locator("header").getByRole("link", { name: "Contact" })).toHaveCount(0);
   });
 
-  test("the home page hero links to LinkedIn and GitHub, with no Get in touch CTA", async ({
+  test("the home page hero links to LinkedIn, GitHub, and Substack, with no Get in touch CTA", async ({
     page,
   }) => {
     await page.goto("/");
@@ -62,6 +63,7 @@ test.describe("contact form removal", () => {
     for (const [name, href] of [
       ["LinkedIn", PROFILE_LINKEDIN],
       ["GitHub", PROFILE_GITHUB],
+      ["Substack", PROFILE_SUBSTACK],
     ] as const) {
       const cta = hero.getByRole("link", { name });
       await expect(cta).toHaveCount(1);
@@ -78,6 +80,29 @@ test.describe("contact form removal", () => {
     }
   });
 
+  test("the footer carries the same three social links", async ({ page }) => {
+    await page.goto("/");
+    const footer = page.locator("footer");
+    for (const [name, href] of [
+      ["LinkedIn", PROFILE_LINKEDIN],
+      ["GitHub", PROFILE_GITHUB],
+      ["Substack", PROFILE_SUBSTACK],
+    ] as const) {
+      const link = footer.getByRole("link", { name });
+      await expect(link).toHaveCount(1);
+      await expect(link).toHaveAttribute("href", href);
+      await expect(link).toHaveAttribute("target", "_blank");
+      await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    }
+  });
+
+  test("the bottom Writing samples CTA is gone; only the hero one remains", async ({ page }) => {
+    await page.goto("/");
+    const writingSamples = page.getByRole("link", { name: /writing samples/i });
+    await expect(writingSamples).toHaveCount(1);
+    await expect(page.locator("section").first().getByRole("link", { name: /writing samples/i })).toHaveCount(1);
+  });
+
   test.describe("on a phone-width viewport", () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
@@ -86,7 +111,7 @@ test.describe("contact form removal", () => {
     }) => {
       await page.goto("/");
       const pills = page.locator("section").first().locator("a");
-      await expect(pills).toHaveCount(3);
+      await expect(pills).toHaveCount(4);
 
       const boxes = await pills.evaluateAll((links) =>
         links.map((a) => {

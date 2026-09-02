@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GitHubIcon, LinkedInIcon } from "./SocialIcons";
+import { GitHubIcon, LinkedInIcon, SubstackIcon } from "./SocialIcons";
 
 export default function Footer() {
   return (
@@ -33,6 +33,15 @@ export default function Footer() {
           >
             <GitHubIcon />
             GitHub
+          </a>
+          <a
+            href="https://albertwxu.substack.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            <SubstackIcon />
+            Substack
           </a>
         </div>
       </div>

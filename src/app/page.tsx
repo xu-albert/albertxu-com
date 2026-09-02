@@ -1,5 +1,5 @@
 import WhatsNew from "@/components/WhatsNew";
-import { GitHubIcon, LinkedInIcon } from "@/components/SocialIcons";
+import { GitHubIcon, LinkedInIcon, SubstackIcon } from "@/components/SocialIcons";
 
 export default function About() {
   return (
@@ -49,6 +49,15 @@ export default function About() {
                 >
                   <GitHubIcon />
                   GitHub
+                </a>
+                <a
+                  href="https://albertwxu.substack.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-muted"
+                >
+                  <SubstackIcon />
+                  Substack
                 </a>
               </div>
             </div>
@@ -150,15 +159,6 @@ export default function About() {
           Let&apos;s connect about opportunities or chat about writing.
         </p>
       </section>
-
-      <div className="mt-14 flex gap-4">
-        <a
-          href="/portfolio"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#333]"
-        >
-          Writing samples &rarr;
-        </a>
-      </div>
 
       </div>
     </div>
