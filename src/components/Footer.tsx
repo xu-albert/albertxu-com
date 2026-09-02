@@ -4,7 +4,7 @@ import { GitHubIcon, LinkedInIcon, SubstackIcon } from "./SocialIcons";
 export default function Footer() {
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4 text-sm text-muted">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-6 py-4 text-sm text-muted">
         <span>
           &copy; {new Date().getFullYear()} Albert Xu
           <span className="px-2 text-border">&middot;</span>

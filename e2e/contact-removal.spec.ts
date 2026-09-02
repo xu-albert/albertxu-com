@@ -139,8 +139,30 @@ test.describe("contact form removal", () => {
         expect(pill.height, `"${pill.label}" should stay on one line`).toBeLessThan(pill.twoLines);
         expect(pill.right, `"${pill.label}" should fit inside the viewport`).toBeLessThanOrEqual(375);
       }
-      // Three pills are wider than a 375px content box, so the row has to wrap.
+      // Four pills are wider than a 375px content box, so the row has to wrap.
       expect(new Set(boxes.map((pill) => Math.round(pill.top))).size).toBeGreaterThan(1);
+    });
+
+    test("the footer socials drop beneath the copyright line instead of squeezing it", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      const footer = page.locator("footer");
+
+      const copyright = footer.locator("span").first();
+      await expect(copyright).toContainText("Albert Xu");
+      const lines = await copyright.evaluate(
+        (el) => el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)
+      );
+      expect(lines, "the copyright line should not wrap beyond two lines").toBeLessThanOrEqual(2);
+
+      for (const name of ["LinkedIn", "GitHub", "Substack"]) {
+        const link = footer.getByRole("link", { name });
+        await expect(link).toBeVisible();
+        const box = await link.boundingBox();
+        expect(box, `"${name}" should be laid out`).not.toBeNull();
+        expect(box!.x + box!.width, `"${name}" should fit inside the viewport`).toBeLessThanOrEqual(375);
+      }
     });
   });
 
