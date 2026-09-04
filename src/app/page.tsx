@@ -3,6 +3,27 @@ import type { MDXComponents } from "mdx/types";
 import HomeProse from "@content/home.mdx";
 import WhatsNew from "@/components/WhatsNew";
 import { GitHubIcon, LinkedInIcon, SubstackIcon } from "@/components/SocialIcons";
+import { useMDXComponents } from "@/mdx-components";
+
+// A local `pre` would shadow the shared handler, which is what turns a
+// ```mermaid fence into a diagram. So render the shared one and pass the
+// framing through it instead: on the ordinary path it spreads props onto the
+// <pre>, and on the mermaid path it ignores them, leaving diagrams untouched.
+// The framing itself has to be spelled out because `.prose :where(pre)` is
+// where the other MDX routes get theirs, and this page carries no `prose`.
+function Pre(props: React.ComponentProps<"pre">) {
+  // `MDXComponents` widens every key with an index signature, so the shared
+  // entry needs naming as what mdx-components.tsx actually puts there.
+  const { pre: SharedPre = "pre" } = useMDXComponents() as {
+    pre?: React.ComponentType<React.ComponentProps<"pre">>;
+  };
+  return (
+    <SharedPre
+      {...props}
+      className="mt-6 overflow-x-auto rounded-md bg-border px-4 py-3 text-sm leading-relaxed"
+    />
+  );
+}
 
 // The copy below What's new lives in content/home.mdx so it can be edited as
 // plain markdown. MDX emits bare tags, so the classes that used to sit on those
@@ -43,14 +64,15 @@ const proseComponents: MDXComponents = {
       {...props}
     />
   ),
-  // The pill is for inline code; inside a fenced block the shared `pre` handler
-  // owns the framing, so it drops back out.
+  // The pill is for inline code; inside a fenced block `Pre` above owns the
+  // framing, so it drops back out.
   code: (props) => (
     <code
       className="rounded bg-accent-soft px-1.5 py-0.5 font-mono text-[0.9em] [pre_&]:bg-transparent [pre_&]:p-0"
       {...props}
     />
   ),
+  pre: Pre,
   // globals.css treats blockquotes as asides rather than quotations: upright,
   // with an accent rule down the left.
   blockquote: (props) => (
