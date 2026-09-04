@@ -1,5 +1,5 @@
 import type { MDXComponents } from "mdx/types";
-import Mermaid from "@/components/Mermaid";
+import Mermaid from "@/components/MermaidLazy";
 
 export function useMDXComponents(): MDXComponents {
   return {
