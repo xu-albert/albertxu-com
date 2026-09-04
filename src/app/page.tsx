@@ -14,8 +14,8 @@ import { useMDXComponents } from "@/mdx-components";
 function Pre(props: React.ComponentProps<"pre">) {
   // `MDXComponents` widens every key with an index signature, so the shared
   // entry needs naming as what mdx-components.tsx actually puts there.
-  const { pre: SharedPre = "pre" } = useMDXComponents() as {
-    pre?: React.ComponentType<React.ComponentProps<"pre">>;
+  const { pre: SharedPre } = useMDXComponents() as {
+    pre: React.ComponentType<React.ComponentProps<"pre">>;
   };
   return (
     <SharedPre
