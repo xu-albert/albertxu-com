@@ -63,9 +63,10 @@ test.describe("home page prose", () => {
   test("every approach bullet spaces its lead-in off the em dash", async ({ page }) => {
     await page.goto("/");
 
-    // The inline JSX dropped this space on the fourth bullet only, because the
-    // em dash sat at the end of its source line and JSX trims line-leading
-    // whitespace. Markdown has no such rule, so all four now agree.
+    // All four bullets spaced their lead-in off the em dash inline and still
+    // do as markdown -- JSX only trims whitespace leading a line *after* a text
+    // node's first, and every em dash sat on the first. So the move changed no
+    // rendered text here; this pins that the four stay in agreement.
     const bullets = await page
       .locator("ul.list-disc > li")
       .allInnerTexts();

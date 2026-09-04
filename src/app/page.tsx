@@ -20,7 +20,16 @@ const proseComponents: MDXComponents = {
   h2: (props) => <h2 className="mt-14 text-xl font-semibold" {...props} />,
   p: (props) => <p className="mt-3 leading-relaxed" {...props} />,
   ul: (props) => <ul className="mt-4 list-disc space-y-3 pl-5" {...props} />,
-  li: (props) => <li className="leading-relaxed" {...props} />,
+  // A bullet's lead-in is written as **bold** in the MDX and held at the
+  // font-medium it had as <span className="font-medium">. Scoped to the leading
+  // word so **bold** written mid-bullet still reads as emphasis, the same as it
+  // does in a paragraph.
+  li: (props) => (
+    <li
+      className="leading-relaxed [&>strong:first-child]:font-medium"
+      {...props}
+    />
+  ),
   // The sign-off is a muted aside, not a body paragraph, so it gets its own
   // tag in the MDX rather than being the one paragraph that renders unlike the
   // others.
@@ -101,10 +110,8 @@ export default function About() {
       {/* animate-fade-up moved from the first section to this wrapper when the
           copy moved out to MDX, so the whole block shares the one load
           animation. Everything past the first section is below the fold at
-          load, so it reads the same. [&_li_strong]:font-medium keeps the
-          bullet lead-ins at the weight they had as <span className="font-medium">
-          while letting them be written as **bold** in the MDX. */}
-      <div className="animate-fade-up delay-3 [&_li_strong]:font-medium">
+          load, so it reads the same. */}
+      <div className="animate-fade-up delay-3">
         <HomeProse components={proseComponents} />
       </div>
 
