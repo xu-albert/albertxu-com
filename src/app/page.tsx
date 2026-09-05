@@ -1,5 +1,90 @@
+import type { MDXComponents } from "mdx/types";
+
+import HomeProse from "@content/home.mdx";
 import WhatsNew from "@/components/WhatsNew";
 import { GitHubIcon, LinkedInIcon, SubstackIcon } from "@/components/SocialIcons";
+import { useMDXComponents } from "@/mdx-components";
+
+// A local `pre` would shadow the shared handler, which is what turns a
+// ```mermaid fence into a diagram. So render the shared one and pass the
+// framing through it instead: on the ordinary path it spreads props onto the
+// <pre>, and on the mermaid path it ignores them, leaving diagrams untouched.
+// The framing itself has to be spelled out because `.prose :where(pre)` is
+// where the other MDX routes get theirs, and this page carries no `prose`.
+function Pre(props: React.ComponentProps<"pre">) {
+  // `MDXComponents` widens every key with an index signature, so the shared
+  // entry needs naming as what mdx-components.tsx actually puts there.
+  const { pre: SharedPre } = useMDXComponents() as {
+    pre: React.ComponentType<React.ComponentProps<"pre">>;
+  };
+  return (
+    <SharedPre
+      {...props}
+      className="mt-6 overflow-x-auto rounded-md bg-border px-4 py-3 text-sm leading-relaxed"
+    />
+  );
+}
+
+// The copy below What's new lives in content/home.mdx so it can be edited as
+// plain markdown. MDX emits bare tags, so the classes that used to sit on those
+// tags inline are mapped back onto them here -- the rendered markup is what it
+// was when the prose was written out in this file. Constructs the prose doesn't
+// use yet are mapped too: with no `prose` class, preflight would otherwise
+// strip a link's underline, a numbered list's numbers and a sub-heading's size,
+// so writing ordinary markdown would silently render as plain body text.
+//
+// Deliberately not the `prose` class that updates/page.tsx uses: the typography
+// plugin would restyle h2 to 1.5em/700 (this page wants text-xl/600), push
+// paragraph leading to 1.75, and recolour the list bullets. Mapping the tags is
+// shorter than tuning all of that back.
+//
+// Section gaps are uniform mt-14 here; inline they alternated mt-14/mt-12,
+// which read as an accident rather than a rhythm.
+const proseComponents: MDXComponents = {
+  h2: (props) => <h2 className="mt-14 text-xl font-semibold" {...props} />,
+  h3: (props) => <h3 className="mt-8 text-lg font-semibold" {...props} />,
+  p: (props) => <p className="mt-3 leading-relaxed" {...props} />,
+  // Matches `.prose a` in globals.css so a link reads the same here as it does
+  // on the MDX routes that do use the typography plugin.
+  a: (props) => (
+    <a
+      className="underline underline-offset-2 transition-colors hover:text-muted"
+      {...props}
+    />
+  ),
+  ul: (props) => <ul className="mt-4 list-disc space-y-3 pl-5" {...props} />,
+  ol: (props) => <ol className="mt-4 list-decimal space-y-3 pl-5" {...props} />,
+  // A bullet's lead-in is written as **bold** in the MDX and held at the
+  // font-medium it had as <span className="font-medium">. Scoped to the leading
+  // word so **bold** written mid-bullet still reads as emphasis, the same as it
+  // does in a paragraph.
+  li: (props) => (
+    <li
+      className="leading-relaxed [&>strong:first-child]:font-medium"
+      {...props}
+    />
+  ),
+  // The pill is for inline code; inside a fenced block `Pre` above owns the
+  // framing, so it drops back out.
+  code: (props) => (
+    <code
+      className="rounded bg-accent-soft px-1.5 py-0.5 font-mono text-[0.9em] [pre_&]:bg-transparent [pre_&]:p-0"
+      {...props}
+    />
+  ),
+  pre: Pre,
+  // globals.css treats blockquotes as asides rather than quotations: upright,
+  // with an accent rule down the left.
+  blockquote: (props) => (
+    <blockquote className="mt-4 border-l-4 border-accent pl-4" {...props} />
+  ),
+  // The sign-off is a muted aside, not a body paragraph, so it gets its own
+  // tag in the MDX rather than being the one paragraph that renders unlike the
+  // others.
+  Closing: (props: React.ComponentProps<"p">) => (
+    <p className="mt-12 leading-relaxed text-muted" {...props} />
+  ),
+};
 
 export default function About() {
   return (
@@ -70,95 +155,13 @@ export default function About() {
 
       <WhatsNew />
 
-      <section className="animate-fade-up delay-3 mt-14">
-        <h2 className="text-xl font-semibold">
-          Documentation is an extension of the product.
-        </h2>
-        <p className="mt-3 leading-relaxed">
-          <strong>Docs is how your users (and your user&apos;s agents) learn how to use your product.</strong>{" "}
-          Often, docs is the first look into how your users perceive the quality of your product.
-          I firmly believe that documentation IS the product, and the best tech writers treat docs as a product itself.
-        </p>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold">My approach</h2>
-        <p className="mt-3 leading-relaxed">
-          Great docs come from collaboration. I work closely with product and
-          engineering to understand what users need, then build documentation
-          that meets them there. I also love teaching engineers how to write —
-          the best docs orgs don&apos;t just have good writers, they have a
-          culture where everyone values clear communication.
-        </p>
-        <ul className="mt-4 list-disc space-y-3 pl-5">
-          <li className="leading-relaxed">
-            <span className="font-medium">Publishing process</span> — I set up
-            docs-as-code pipelines with Git, Markdown, and CI/CD. At C3 AI, I
-            created the processes and templates that power their documentation
-            pipeline.
-          </li>
-          <li className="leading-relaxed">
-            <span className="font-medium">Information architecture</span> — At
-            AWS, I consolidated three separate S3 guides into a single unified
-            user guide.
-          </li>
-          <li className="leading-relaxed">
-            <span className="font-medium">Technical expertise</span> — I have a
-            Computer Engineering degree from UIUC and have worked with highly
-            technical software my entire career. I onboard fast.
-          </li>
-          <li className="leading-relaxed">
-            <span className="font-medium">UI text &amp; content</span> —
-            Documentation isn&apos;t limited to topics and guides. I write and
-            edit UI text, error messages, and in-product copy to convey
-            information cleanly.
-          </li>
-        </ul>
-      </section>
-
-      <section className="mt-14">
-        <h2 className="text-xl font-semibold">
-          Why hire a tech writer? Why not use AI to write everything?
-        </h2>
-        <p className="mt-3 leading-relaxed">
-          I&apos;ve seen a cultural shift in tech writing happen over the last
-          year: AI is taking more and more of the share of the actual writing.
-{" "}<strong>Using AI to write is not only encouraged, but almost enforced.</strong>{" "}If
-          you&apos;re an engineer, you already know how much your day-to-day
-          involves using AI to write code. I think tech writing is inevitably
-          meeting the same fate as coding — you can probably get 80-90% of the
-          way there with an AI generated first draft.
-        </p>
-        <p className="mt-3 leading-relaxed">
-          However, that&apos;s only if you know what great output looks like. You still need a tech writer to monitor
-          AI output and ensure quality standards. There&apos;s an understanding that comes with experience when
-          you&apos;re specifically using LLMs to write content. The writing itself now extends to crafting prompts,
-          writing system instructions for agents, creating reusable skills that
-          enforce consistent voice and structure, and structuring context so
-          models produce useful output. I argue the same skills that make someone
-          good at documentation make them good at getting the most out of AI.
-        </p>
-        <p className="mt-3 leading-relaxed">
-          Using AI to generate drafts is only one piece of the puzzle, though;
-          tech writers are becoming more like product managers. A great tech
-          writer can multiply their output by validating AI generated content.
-          The best tech writers think about docs as part of the product as a
-          whole.
-        </p>
-        <p className="mt-3 leading-relaxed">
-          It may not be necessary to have a tech writer. But in my opinion, a
-          tech writer more than makes up for their worth by strategizing the
-          best way your users learn about the product. That human ownership
-          gets your docs from 90% to 100% — and I think every user deserves
-          100% of your product.
-        </p>
-      </section>
-
-      <section className="mt-12">
-        <p className="leading-relaxed text-muted">
-          Let&apos;s connect about opportunities or chat about writing.
-        </p>
-      </section>
+      {/* animate-fade-up moved from the first section to this wrapper when the
+          copy moved out to MDX, so the whole block shares the one load
+          animation. Everything past the first section is below the fold at
+          load, so it reads the same. */}
+      <div className="animate-fade-up delay-3">
+        <HomeProse components={proseComponents} />
+      </div>
 
       </div>
     </div>
