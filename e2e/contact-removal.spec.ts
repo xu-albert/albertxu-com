@@ -18,20 +18,6 @@ test.describe("contact form removal", () => {
     expect(res.headers()["location"]).toBe(PROFILE_LINKEDIN);
   });
 
-  test("a browser visiting /contact lands on the LinkedIn profile", async ({
-    page,
-  }) => {
-    const response = await page.goto("/contact");
-
-    // LinkedIn canonicalizes the profile URL once the browser reaches it, so
-    // assert the hop the site sends, not wherever LinkedIn settles afterwards.
-    const hops: string[] = [];
-    for (let req = response!.request(); req.redirectedFrom(); req = req.redirectedFrom()!) {
-      hops.unshift(req.url());
-    }
-    expect(hops[0]).toBe(PROFILE_LINKEDIN);
-  });
-
   test("the /api/contact route handler is gone", async ({ request }) => {
     const post = await request.post("/api/contact", {
       data: { name: "Test", email: "test@example.com", message: "Hello" },
