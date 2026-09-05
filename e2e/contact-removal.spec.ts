@@ -1,10 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const LINKEDIN = "https://linkedin.com/in/albertwxu";
-
-// The profiles the site itself links to (the /contact redirect above is a
-// separate, older target).
+// The profiles the site itself links to; the /contact redirect targets the
+// same LinkedIn profile.
 const PROFILE_LINKEDIN = "https://www.linkedin.com/in/albertxu451/";
+const LINKEDIN = PROFILE_LINKEDIN;
 const PROFILE_GITHUB = "https://github.com/xu-albert";
 const PROFILE_SUBSTACK = "https://albertwxu.substack.com/";
 
@@ -30,8 +29,8 @@ test.describe("contact form removal", () => {
 
     await page.goto("/contact");
 
-    // Allow the `www.` LinkedIn itself canonicalizes to when it isn't stubbed.
-    expect(page.url()).toMatch(/^https:\/\/(www\.)?linkedin\.com\/in\/albertwxu$/);
+    // Chromium reports the URL without the trailing slash the config sends.
+    expect(page.url()).toMatch(/^https:\/\/www\.linkedin\.com\/in\/albertxu451\/?$/);
   });
 
   test("the /api/contact route handler is gone", async ({ request }) => {

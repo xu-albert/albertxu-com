@@ -149,7 +149,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/contact",
-        destination: "https://linkedin.com/in/albertwxu",
+        destination: "https://www.linkedin.com/in/albertxu451/",
         permanent: false,
       },
     ];
