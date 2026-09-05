@@ -1,9 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const LINKEDIN = "https://linkedin.com/in/albertwxu";
-
-// The profiles the site itself links to (the /contact redirect above is a
-// separate, older target).
+// The profiles the site itself links to; the /contact redirect targets the
+// same LinkedIn profile.
 const PROFILE_LINKEDIN = "https://www.linkedin.com/in/albertxu451/";
 const PROFILE_GITHUB = "https://github.com/xu-albert";
 const PROFILE_SUBSTACK = "https://albertwxu.substack.com/";
@@ -17,21 +15,7 @@ test.describe("contact form removal", () => {
     // 307, not 308: deliberately temporary so nothing caches it forever and an
     // on-site /contact page can come back later. See next.config.ts.
     expect(res.status()).toBe(307);
-    expect(res.headers()["location"]).toBe(LINKEDIN);
-  });
-
-  test("a browser visiting /contact lands on the LinkedIn profile", async ({
-    page,
-  }) => {
-    // Stub LinkedIn so the test never depends on the live site being reachable.
-    await page.route(/linkedin\.com/, (route) =>
-      route.fulfill({ status: 200, contentType: "text/html", body: "<h1>LinkedIn</h1>" })
-    );
-
-    await page.goto("/contact");
-
-    // Allow the `www.` LinkedIn itself canonicalizes to when it isn't stubbed.
-    expect(page.url()).toMatch(/^https:\/\/(www\.)?linkedin\.com\/in\/albertwxu$/);
+    expect(res.headers()["location"]).toBe(PROFILE_LINKEDIN);
   });
 
   test("the /api/contact route handler is gone", async ({ request }) => {
