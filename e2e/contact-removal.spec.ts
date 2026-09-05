@@ -3,7 +3,6 @@ import { test, expect, type Page } from "@playwright/test";
 // The profiles the site itself links to; the /contact redirect targets the
 // same LinkedIn profile.
 const PROFILE_LINKEDIN = "https://www.linkedin.com/in/albertxu451/";
-const LINKEDIN = PROFILE_LINKEDIN;
 const PROFILE_GITHUB = "https://github.com/xu-albert";
 const PROFILE_SUBSTACK = "https://albertwxu.substack.com/";
 
@@ -16,21 +15,21 @@ test.describe("contact form removal", () => {
     // 307, not 308: deliberately temporary so nothing caches it forever and an
     // on-site /contact page can come back later. See next.config.ts.
     expect(res.status()).toBe(307);
-    expect(res.headers()["location"]).toBe(LINKEDIN);
+    expect(res.headers()["location"]).toBe(PROFILE_LINKEDIN);
   });
 
   test("a browser visiting /contact lands on the LinkedIn profile", async ({
     page,
   }) => {
-    // Stub LinkedIn so the test never depends on the live site being reachable.
-    await page.route(/linkedin\.com/, (route) =>
-      route.fulfill({ status: 200, contentType: "text/html", body: "<h1>LinkedIn</h1>" })
-    );
+    const response = await page.goto("/contact");
 
-    await page.goto("/contact");
-
-    // Chromium reports the URL without the trailing slash the config sends.
-    expect(page.url()).toMatch(/^https:\/\/www\.linkedin\.com\/in\/albertxu451\/?$/);
+    // LinkedIn canonicalizes the profile URL once the browser reaches it, so
+    // assert the hop the site sends, not wherever LinkedIn settles afterwards.
+    const hops: string[] = [];
+    for (let req = response!.request(); req.redirectedFrom(); req = req.redirectedFrom()!) {
+      hops.unshift(req.url());
+    }
+    expect(hops[0]).toBe(PROFILE_LINKEDIN);
   });
 
   test("the /api/contact route handler is gone", async ({ request }) => {
