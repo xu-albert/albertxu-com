@@ -79,9 +79,10 @@ const INTERNAL_PDF_SAMPLES = [
 ] as const;
 
 test.describe("portfolio PDF mirrors", () => {
-  test("renders primary links and PDF mirror links for the 9 C3.ai and AWS samples without nested anchors", async ({
+  test("renders primary links and separate PDF mirror buttons for the 9 C3.ai and AWS samples without nested anchors", async ({
     page,
   }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/portfolio");
 
     await expect(
@@ -109,6 +110,15 @@ test.describe("portfolio PDF mirrors", () => {
       await expect(mirrorLink).toHaveAttribute("href", sample.mirrorHref);
       await expect(mirrorLink).toHaveAttribute("target", "_blank");
       await expect(mirrorLink).toHaveAttribute("rel", "noopener noreferrer");
+
+      const primaryBox = await primaryLink.boundingBox();
+      const mirrorBox = await mirrorLink.boundingBox();
+      expect(primaryBox).not.toBeNull();
+      expect(mirrorBox).not.toBeNull();
+      expect(mirrorBox!.x).toBeGreaterThanOrEqual(
+        primaryBox!.x + primaryBox!.width
+      );
+      expect(mirrorBox!.x + mirrorBox!.width).toBeLessThanOrEqual(1280);
     }
   });
 
@@ -162,7 +172,7 @@ test.describe("portfolio PDF mirrors", () => {
   test.describe("on a phone-width viewport", () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
-    test("portfolio sample cards and PDF mirror pills fit inside the viewport", async ({
+    test("portfolio sample cards and PDF mirror buttons sit side by side without overlapping or overflowing", async ({
       page,
     }) => {
       await page.goto("/portfolio");
@@ -170,12 +180,24 @@ test.describe("portfolio PDF mirrors", () => {
       const mirrorLinks = page.getByRole("link", { name: "PDF mirror", exact: true });
       await expect(mirrorLinks).toHaveCount(MIRRORED_SAMPLES.length);
 
-      for (let i = 0; i < MIRRORED_SAMPLES.length; i++) {
-        const pill = mirrorLinks.nth(i);
-        await expect(pill).toBeVisible();
-        const box = await pill.boundingBox();
-        expect(box).not.toBeNull();
-        expect(box!.x + box!.width).toBeLessThanOrEqual(375);
+      for (const sample of MIRRORED_SAMPLES) {
+        const item = page.locator("li", {
+          has: page.getByRole("link", { name: sample.title, exact: true }),
+        });
+        const primaryLink = item.getByRole("link", { name: sample.title, exact: true });
+        const mirrorLink = item.getByRole("link", { name: "PDF mirror", exact: true });
+
+        await expect(primaryLink).toBeVisible();
+        await expect(mirrorLink).toBeVisible();
+
+        const primaryBox = await primaryLink.boundingBox();
+        const mirrorBox = await mirrorLink.boundingBox();
+        expect(primaryBox).not.toBeNull();
+        expect(mirrorBox).not.toBeNull();
+        expect(mirrorBox!.x).toBeGreaterThanOrEqual(
+          primaryBox!.x + primaryBox!.width
+        );
+        expect(mirrorBox!.x + mirrorBox!.width).toBeLessThanOrEqual(375);
       }
     });
   });

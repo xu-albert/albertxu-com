@@ -134,14 +134,14 @@ function SampleList({
   return (
     <ul className={`space-y-2 ${className ?? ""}`}>
       {samples.map((sample) => (
-        <li key={sample.title}>
-          <div className="relative flex items-center justify-between gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:border-muted hover:bg-border/30">
-            <a
-              href={sample.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="peer min-w-0 flex-1 after:absolute after:inset-0"
-            >
+        <li key={sample.title} className="flex items-stretch gap-2">
+          <a
+            href={sample.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex min-w-0 flex-1 items-center justify-between rounded-lg border border-border px-4 py-3 transition-colors hover:border-muted hover:bg-border/30"
+          >
+            <div className="min-w-0">
               <span className="flex items-center gap-2">
                 {sample.title}
                 {sample.href.endsWith(".pdf") && (
@@ -155,24 +155,24 @@ function SampleList({
                   {sample.description}
                 </p>
               )}
-            </a>
-            {sample.mirrorHref && (
-              <a
-                href={sample.mirrorHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 shrink-0 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted transition-colors hover:border-muted hover:text-foreground"
-              >
-                PDF mirror
-              </a>
-            )}
+            </div>
             <span
               aria-hidden="true"
-              className="shrink-0 text-muted transition-transform peer-hover:translate-x-0.5"
+              className="ml-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5"
             >
               &rarr;
             </span>
-          </div>
+          </a>
+          {sample.mirrorHref && (
+            <a
+              href={sample.mirrorHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex shrink-0 items-center rounded-lg border border-border px-3 py-3 text-xs font-medium text-muted transition-colors hover:border-muted hover:bg-border/30 hover:text-foreground"
+            >
+              PDF mirror
+            </a>
+          )}
         </li>
       ))}
     </ul>
