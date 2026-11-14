@@ -1,7 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 
 import HomeProse from "@content/home.mdx";
-import WhatsNew from "@/components/WhatsNew";
 import { GitHubIcon, LinkedInIcon, SubstackIcon } from "@/components/SocialIcons";
 import { useMDXComponents } from "@/mdx-components";
 
@@ -25,11 +24,11 @@ function Pre(props: React.ComponentProps<"pre">) {
   );
 }
 
-// The copy below What's new lives in content/home.mdx so it can be edited as
-// plain markdown. MDX emits bare tags, so the classes that used to sit on those
-// tags inline are mapped back onto them here -- the rendered markup is what it
-// was when the prose was written out in this file. Constructs the prose doesn't
-// use yet are mapped too: with no `prose` class, preflight would otherwise
+// The copy lives in content/home.mdx so it can be edited as plain markdown.
+// MDX emits bare tags, so the classes that used to sit on those tags inline are
+// mapped back onto them here -- the rendered markup is what it was when the
+// prose was written out in this file. Constructs the prose doesn't use yet are
+// mapped too: with no `prose` class, preflight would otherwise
 // strip a link's underline, a numbered list's numbers and a sub-heading's size,
 // so writing ordinary markdown would silently render as plain body text.
 //
@@ -78,12 +77,6 @@ const proseComponents: MDXComponents = {
   blockquote: (props) => (
     <blockquote className="mt-4 border-l-4 border-accent pl-4" {...props} />
   ),
-  // The sign-off is a muted aside, not a body paragraph, so it gets its own
-  // tag in the MDX rather than being the one paragraph that renders unlike the
-  // others.
-  Closing: (props: React.ComponentProps<"p">) => (
-    <p className="mt-12 leading-relaxed text-muted" {...props} />
-  ),
 };
 
 export default function About() {
@@ -101,14 +94,11 @@ export default function About() {
               />
             </div>
             <div className="animate-fade-up delay-1 flex-1 text-center sm:text-left">
-              <p className="text-sm font-medium uppercase tracking-widest text-muted">
-                Technical Writer / Content Engineer
-              </p>
-              <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+              <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
                 Hi, I&apos;m Albert.
               </h1>
               <p className="mt-5 text-lg leading-relaxed text-muted">
-                Experience writing software docs at C3 AI, AWS, and EY.
+                Technical writer at YouTube
               </p>
               <div className="mt-8 flex flex-wrap gap-4 max-sm:justify-center">
                 <a
@@ -152,17 +142,13 @@ export default function About() {
 
       {/* Content */}
       <div className="mx-auto max-w-3xl px-6 pb-16">
-
-      <WhatsNew />
-
-      {/* animate-fade-up moved from the first section to this wrapper when the
-          copy moved out to MDX, so the whole block shares the one load
-          animation. Everything past the first section is below the fold at
-          load, so it reads the same. */}
-      <div className="animate-fade-up delay-3">
-        <HomeProse components={proseComponents} />
-      </div>
-
+        {/* animate-fade-up moved from the first section to this wrapper when the
+            copy moved out to MDX, so the whole block shares the one load
+            animation. Everything past the first section is below the fold at
+            load, so it reads the same. */}
+        <div className="animate-fade-up delay-2">
+          <HomeProse components={proseComponents} />
+        </div>
       </div>
     </div>
   );

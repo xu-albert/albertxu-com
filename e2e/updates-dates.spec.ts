@@ -62,6 +62,7 @@ test.describe("site updates publish months", () => {
 
     // Older months are untouched, and the page still reads newest-first.
     expect([...months.keys()]).toEqual([
+      "November 2026",
       "September 2026",
       "August 2026",
       "July 2026",
@@ -70,24 +71,14 @@ test.describe("site updates publish months", () => {
     ]);
   });
 
-  test("the home page What's new card dates the case study the same month", async ({
+  test("the home page does not render the removed What's new card", async ({
     page,
   }) => {
-    await page.goto("/updates");
-    const [changelogMonth] = (await entriesByMonth(page)).find(([, entries]) =>
-      entries.some((e) => /Gonna Rain\?/i.test(e))
-    )!;
-
     await page.goto("/");
-    const card = page
-      .locator("section", { has: page.getByText("What's new") })
-      .locator('a[href="/projects/gonna-rain"]');
-    await expect(card).toHaveCount(1);
-
-    // The card is a separate hand-maintained list, so it can drift from the
-    // changelog — that drift is the bug this guards.
-    await expect(card).toContainText(changelogMonth);
-    await expect(card).not.toContainText("July 2026");
+    await expect(
+      page.locator("section", { has: page.getByText("What's new") })
+    ).toHaveCount(0);
+    await expect(page.locator('a[href="/projects/gonna-rain"]')).toHaveCount(0);
   });
 
   test("the case study page itself claims no other publish month", async ({ page }) => {
