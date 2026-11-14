@@ -7,22 +7,33 @@ import { test, expect } from "@playwright/test";
 // look the copy had when it was inline.
 
 test.describe("home page prose", () => {
-  test("the MDX copy renders under the What's new section", async ({ page }) => {
+  test("the MDX copy renders on the home page with removed sections absent", async ({ page }) => {
     await page.goto("/");
 
     for (const heading of [
       "Documentation is an extension of the product.",
       "My approach",
-      "Why hire a tech writer? Why not use AI to write everything?",
     ]) {
       await expect(
         page.getByRole("heading", { level: 2, name: heading, exact: true })
       ).toBeVisible();
     }
 
+    // "Why not have AI do all the writing?" section is removed
     await expect(
-      page.getByText("Let's connect about opportunities or chat about writing.")
-    ).toBeVisible();
+      page.getByRole("heading", { level: 2, name: /AI/i })
+    ).toHaveCount(0);
+  });
+
+  test("the hero reflects the refreshed tagline with removed items absent", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.getByText("Technical writer at YouTube")).toBeVisible();
+    await expect(page.getByText("Technical Writer / Content Engineer")).toHaveCount(0);
+    await expect(
+      page.getByText("Experience writing software docs at C3 AI, AWS, and EY.")
+    ).toHaveCount(0);
+    await expect(page.getByText("What's new")).toHaveCount(0);
   });
 
   test("headings and body keep the type scale they had inline", async ({ page }) => {
@@ -37,43 +48,5 @@ test.describe("home page prose", () => {
     await expect(
       page.getByText("Great docs come from collaboration.", { exact: false })
     ).toHaveCSS("line-height", "26px");
-  });
-
-  test("the approach bullets keep their lighter lead-in weight", async ({ page }) => {
-    await page.goto("/");
-
-    // Written as **bold** in the MDX, but rendered at font-medium so the
-    // lead-ins read as labels rather than as emphasis mid-sentence.
-    const leadIns = page.locator("li strong");
-    await expect(leadIns).toHaveCount(4);
-
-    for (const label of [
-      "Publishing process",
-      "Information architecture",
-      "Technical expertise",
-      "UI text & content",
-    ]) {
-      await expect(leadIns.filter({ hasText: label })).toHaveCSS(
-        "font-weight",
-        "500"
-      );
-    }
-  });
-
-  test("every approach bullet spaces its lead-in off the em dash", async ({ page }) => {
-    await page.goto("/");
-
-    // All four bullets spaced their lead-in off the em dash inline and still
-    // do as markdown -- JSX only trims whitespace leading a line *after* a text
-    // node's first, and every em dash sat on the first. So the move changed no
-    // rendered text here; this pins that the four stay in agreement.
-    const bullets = await page
-      .locator("ul.list-disc > li")
-      .allInnerTexts();
-
-    expect(bullets).toHaveLength(4);
-    for (const bullet of bullets) {
-      expect(bullet).toContain(" — ");
-    }
   });
 });

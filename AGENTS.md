@@ -24,7 +24,7 @@ Page copy is MDX under `content/`, imported as a component into a TSX route — 
 class. **Where a route has a `content/*.mdx`, edit the words there, not in the TSX.**
 
 Not every route does. `/resume` and `/portfolio` keep their copy inline, and on the home page the
-hero strings and the `WhatsNew` highlights list stay in TSX deliberately — those are layout and
+hero strings stay in TSX deliberately — those are layout and
 typed data rather than prose.
 
 ## Security headers
