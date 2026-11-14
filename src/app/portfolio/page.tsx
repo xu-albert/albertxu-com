@@ -39,27 +39,8 @@ const sections: {
   },
   {
     company: "AWS (Amazon S3)",
-    intro: "Some stuff I\u2019ve worked on that\u2019s largely been unchanged since leaving AWS.",
+    intro: "Worked almost exclusively on Amazon S3",
     samples: [
-      {
-        title: "Replicating existing objects with Batch Replication",
-        href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html",
-        mirrorHref: "/portfolio-mirrors/aws-s3-batch-replication.pdf",
-      },
-      {
-        title: "GetBucketReplication API",
-        href: "https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html",
-        mirrorHref: "/portfolio-mirrors/aws-s3-get-bucket-replication-api.pdf",
-      },
-      {
-        title: "Delete an Archive in S3 Glacier using the AWS CLI",
-        href: "https://docs.aws.amazon.com/amazonglacier/latest/dev/getting-started-delete-archive-cli.html",
-        mirrorHref: "/portfolio-mirrors/aws-s3-glacier-delete-archive-cli.pdf",
-      },
-    ],
-    secondaryIntro:
-      "I\u2019ve worked on the content below, but topics may have been updated or edited since I left AWS.",
-    secondarySamples: [
       {
         title: "Creating, configuring, and working with Amazon S3 buckets",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html",
@@ -74,6 +55,21 @@ const sections: {
         title: "Naming Amazon S3 objects",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html",
         mirrorHref: "/portfolio-mirrors/aws-s3-naming-objects.pdf",
+      },
+      {
+        title: "Replicating existing objects with Batch Replication",
+        href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-batch-replication.pdf",
+      },
+      {
+        title: "GetBucketReplication API",
+        href: "https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-get-bucket-replication-api.pdf",
+      },
+      {
+        title: "Delete an Archive in S3 Glacier using the AWS CLI",
+        href: "https://docs.aws.amazon.com/amazonglacier/latest/dev/getting-started-delete-archive-cli.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-glacier-delete-archive-cli.pdf",
       },
     ],
   },

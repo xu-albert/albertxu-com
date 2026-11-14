@@ -169,6 +169,48 @@ test.describe("portfolio PDF mirrors", () => {
     }
   });
 
+  test("organizes the AWS section with the updated intro and unified 6-item S3 progression", async ({
+    page,
+  }) => {
+    await page.goto("/portfolio");
+
+    const awsSection = page.locator("section", {
+      has: page.getByRole("heading", { level: 2, name: "AWS (Amazon S3)" }),
+    });
+    await expect(awsSection).toHaveCount(1);
+    await expect(
+      awsSection.getByText("Worked almost exclusively on Amazon S3", {
+        exact: true,
+      })
+    ).toBeVisible();
+    await expect(
+      awsSection.getByText(/largely been unchanged since leaving AWS/i)
+    ).toHaveCount(0);
+    await expect(
+      awsSection.getByText(/topics may have been updated or edited/i)
+    ).toHaveCount(0);
+
+    const lists = awsSection.locator("ul");
+    await expect(lists).toHaveCount(1);
+
+    const titles = await lists
+      .locator("li > a:first-child")
+      .evaluateAll((links) =>
+        links.map((a) => {
+          const titleSpan = a.querySelector("span");
+          return titleSpan?.textContent?.trim() ?? "";
+        })
+      );
+    expect(titles).toEqual([
+      "Creating, configuring, and working with Amazon S3 buckets",
+      "Amazon S3 objects overview",
+      "Naming Amazon S3 objects",
+      "Replicating existing objects with Batch Replication",
+      "GetBucketReplication API",
+      "Delete an Archive in S3 Glacier using the AWS CLI",
+    ]);
+  });
+
   test.describe("on a phone-width viewport", () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
