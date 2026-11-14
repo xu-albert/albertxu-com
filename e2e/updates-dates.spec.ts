@@ -62,6 +62,7 @@ test.describe("site updates publish months", () => {
 
     // Older months are untouched, and the page still reads newest-first.
     expect([...months.keys()]).toEqual([
+      "November 2026",
       "September 2026",
       "August 2026",
       "July 2026",

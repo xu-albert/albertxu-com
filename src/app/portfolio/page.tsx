@@ -2,7 +2,20 @@ export const metadata = {
   title: "Portfolio",
 };
 
-const sections = [
+type Sample = {
+  title: string;
+  href: string;
+  description?: string;
+  mirrorHref?: string;
+};
+
+const sections: {
+  company: string;
+  intro?: string;
+  samples: Sample[];
+  secondaryIntro?: string;
+  secondarySamples?: Sample[];
+}[] = [
   {
     company: "C3.ai",
     intro: "Wrote docs mostly for C3\u2019s AI/ML developer platform.",
@@ -10,14 +23,17 @@ const sections = [
       {
         title: "Virtualization",
         href: "https://docs.c3.ai/docs/platform/8.9/topic/di-data-virtualization",
+        mirrorHref: "/portfolio-mirrors/c3-ai-data-virtualization.pdf",
       },
       {
         title: "Package Structure",
         href: "https://docs.c3.ai/docs/platform/8.9/topic/package-structure-overview",
+        mirrorHref: "/portfolio-mirrors/c3-ai-package-structure.pdf",
       },
       {
         title: "C3 AI Feature Store Overview",
         href: "https://docs.c3.ai/docs/platform/8.9/topic/ds-feature-store",
+        mirrorHref: "/portfolio-mirrors/c3-ai-feature-store-overview.pdf",
       },
     ],
   },
@@ -28,14 +44,17 @@ const sections = [
       {
         title: "Replicating existing objects with Batch Replication",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-batch-replication.pdf",
       },
       {
         title: "GetBucketReplication API",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-get-bucket-replication-api.pdf",
       },
       {
         title: "Delete an Archive in S3 Glacier using the AWS CLI",
         href: "https://docs.aws.amazon.com/amazonglacier/latest/dev/getting-started-delete-archive-cli.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-glacier-delete-archive-cli.pdf",
       },
     ],
     secondaryIntro:
@@ -44,14 +63,17 @@ const sections = [
       {
         title: "Creating, configuring, and working with Amazon S3 buckets",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-creating-buckets.pdf",
       },
       {
         title: "Amazon S3 objects overview",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingObjects.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-objects-overview.pdf",
       },
       {
         title: "Naming Amazon S3 objects",
         href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html",
+        mirrorHref: "/portfolio-mirrors/aws-s3-naming-objects.pdf",
       },
     ],
   },
@@ -106,20 +128,20 @@ function SampleList({
   samples,
   className,
 }: {
-  samples: { title: string; href: string; description?: string }[];
+  samples: Sample[];
   className?: string;
 }) {
   return (
     <ul className={`space-y-2 ${className ?? ""}`}>
       {samples.map((sample) => (
         <li key={sample.title}>
-          <a
-            href={sample.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between rounded-lg border border-border px-4 py-3 transition-colors hover:border-muted hover:bg-border/30"
-          >
-            <div>
+          <div className="relative flex items-center justify-between gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:border-muted hover:bg-border/30">
+            <a
+              href={sample.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="peer min-w-0 flex-1 after:absolute after:inset-0"
+            >
               <span className="flex items-center gap-2">
                 {sample.title}
                 {sample.href.endsWith(".pdf") && (
@@ -133,11 +155,24 @@ function SampleList({
                   {sample.description}
                 </p>
               )}
-            </div>
-            <span className="ml-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5">
+            </a>
+            {sample.mirrorHref && (
+              <a
+                href={sample.mirrorHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 shrink-0 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted transition-colors hover:border-muted hover:text-foreground"
+              >
+                PDF mirror
+              </a>
+            )}
+            <span
+              aria-hidden="true"
+              className="shrink-0 text-muted transition-transform peer-hover:translate-x-0.5"
+            >
               &rarr;
             </span>
-          </a>
+          </div>
         </li>
       ))}
     </ul>
