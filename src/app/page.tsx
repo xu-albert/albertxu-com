@@ -84,7 +84,7 @@ export default function About() {
   return (
     <div>
       {/* Hero */}
-      <section className="px-6 pt-20 pb-10">
+      <section className="px-6 pt-20 pb-14 sm:pb-16">
         <div className="mx-auto max-w-3xl">
           <div className="flex flex-col items-center gap-10 sm:flex-row sm:items-end sm:gap-16">
             <div className="animate-fade-up relative">

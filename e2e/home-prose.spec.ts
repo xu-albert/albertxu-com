@@ -56,7 +56,7 @@ test.describe("home page prose", () => {
     await page.goto("/");
 
     const hero = page.locator("section").first();
-    await expect(hero).toHaveCSS("padding-bottom", "40px");
+    await expect(hero).toHaveCSS("padding-bottom", "64px");
 
     const firstHeading = page.getByRole("heading", {
       level: 2,
