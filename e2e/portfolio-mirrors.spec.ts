@@ -46,13 +46,14 @@ const MIRRORED_SAMPLES = [
     href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html",
     mirrorHref: "/portfolio-mirrors/aws-s3-naming-objects.pdf",
   },
-] as const;
-
-const UNMIRRORED_EXTERNAL_SAMPLES = [
   {
     title: "What is EY GigNow?",
     href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
+    mirrorHref: "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf",
   },
+] as const;
+
+const UNMIRRORED_EXTERNAL_SAMPLES = [
   {
     title: "Binary Representation: Unsigned and 2\u2019s Complement",
     href: "https://medium.com/@murmuring/binary-representation-unsigned-and-2s-complement-f8b3afa4a3ef",
@@ -79,7 +80,7 @@ const INTERNAL_PDF_SAMPLES = [
 ] as const;
 
 test.describe("portfolio PDF mirrors", () => {
-  test("renders primary links and separate PDF mirror buttons for the 9 C3.ai and AWS samples without nested anchors", async ({
+  test("renders primary links and separate PDF mirror buttons for the 10 C3.ai, AWS, and EY GigNow samples without nested anchors", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });

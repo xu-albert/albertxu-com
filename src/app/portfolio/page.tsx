@@ -80,6 +80,7 @@ const sections: {
       {
         title: "What is EY GigNow?",
         href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
+        mirrorHref: "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf",
       },
     ],
   },
