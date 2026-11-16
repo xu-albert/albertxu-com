@@ -37,10 +37,11 @@ function Pre(props: React.ComponentProps<"pre">) {
 // paragraph leading to 1.75, and recolour the list bullets. Mapping the tags is
 // shorter than tuning all of that back.
 //
-// Section gaps are uniform mt-14 here; inline they alternated mt-14/mt-12,
-// which read as an accident rather than a rhythm.
+// Section gaps are uniform mt-14 here (with first:mt-0 so the first heading
+// sits flush against the hero's bottom padding); inline they alternated
+// mt-14/mt-12, which read as an accident rather than a rhythm.
 const proseComponents: MDXComponents = {
-  h2: (props) => <h2 className="mt-14 text-xl font-semibold" {...props} />,
+  h2: (props) => <h2 className="mt-14 first:mt-0 text-xl font-semibold" {...props} />,
   h3: (props) => <h3 className="mt-8 text-lg font-semibold" {...props} />,
   p: (props) => <p className="mt-3 leading-relaxed" {...props} />,
   // Matches `.prose a` in globals.css so a link reads the same here as it does
@@ -83,7 +84,7 @@ export default function About() {
   return (
     <div>
       {/* Hero */}
-      <section className="px-6 pt-20 pb-16">
+      <section className="px-6 pt-20 pb-14 sm:pb-16">
         <div className="mx-auto max-w-3xl">
           <div className="flex flex-col items-center gap-10 sm:flex-row sm:items-end sm:gap-16">
             <div className="animate-fade-up relative">

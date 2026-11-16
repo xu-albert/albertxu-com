@@ -49,4 +49,27 @@ test.describe("home page prose", () => {
       page.getByText("Great docs come from collaboration.", { exact: false })
     ).toHaveCSS("line-height", "26px");
   });
+
+  test("hero-to-first-heading gap is tightened while subsequent h2s keep mt-14", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const hero = page.locator("section").first();
+    await expect(hero).toHaveCSS("padding-bottom", "64px");
+
+    const firstHeading = page.getByRole("heading", {
+      level: 2,
+      name: "Documentation is an extension of the product.",
+      exact: true,
+    });
+    await expect(firstHeading).toHaveCSS("margin-top", "0px");
+
+    const secondHeading = page.getByRole("heading", {
+      level: 2,
+      name: "My approach",
+      exact: true,
+    });
+    await expect(secondHeading).toHaveCSS("margin-top", "56px");
+  });
 });
