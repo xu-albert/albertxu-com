@@ -46,11 +46,6 @@ const MIRRORED_SAMPLES = [
     href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html",
     mirrorHref: "/portfolio-mirrors/aws-s3-naming-objects.pdf",
   },
-  {
-    title: "What is EY GigNow?",
-    href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
-    mirrorHref: "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf",
-  },
 ] as const;
 
 const UNMIRRORED_EXTERNAL_SAMPLES = [
@@ -80,11 +75,18 @@ const INTERNAL_PDF_SAMPLES = [
 ] as const;
 
 test.describe("portfolio PDF mirrors", () => {
-  test("renders primary links and separate PDF mirror buttons for the 10 C3.ai, AWS, and EY GigNow samples without nested anchors", async ({
+  test("renders primary links and separate PDF mirror buttons for the 9 C3.ai and AWS samples without nested anchors", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/portfolio");
+
+    await expect(
+      page.getByRole("heading", { name: "Ernst and Young (GigNow)" })
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "What is EY GigNow?" })
+    ).toHaveCount(0);
 
     await expect(
       page.locator("header").getByRole("link", { name: "Portfolio", exact: true })
