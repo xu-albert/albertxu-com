@@ -7,7 +7,7 @@ export default function Resume() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-3xl font-bold tracking-tight">Resume</h1>
       <p className="mt-2 text-muted">
-        6 years of explaining software to humans (and now, to agents too).
+        My experience explaining software to humans (and more recently, agents).
       </p>
 
       <section className="mt-10">
@@ -15,6 +15,17 @@ export default function Resume() {
           Experience
         </h2>
         <ol className="mt-4 space-y-10">
+          <li>
+            <div className="flex items-baseline justify-between">
+              <h3 className="font-semibold">YouTube</h3>
+              <span className="text-sm text-muted">2026 &ndash;</span>
+            </div>
+            <p className="text-sm text-muted">Technical Writer</p>
+            <p className="mt-2 leading-relaxed">
+              Writing developer docs at YouTube. Also promoting AI advocacy and
+              usage at YouTube engineering.
+            </p>
+          </li>
           <li>
             <div className="flex items-baseline justify-between">
               <h3 className="font-semibold">C3.ai</h3>
