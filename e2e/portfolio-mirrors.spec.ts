@@ -46,11 +46,6 @@ const MIRRORED_SAMPLES = [
     href: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html",
     mirrorHref: "/portfolio-mirrors/aws-s3-naming-objects.pdf",
   },
-  {
-    title: "What is EY GigNow?",
-    href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
-    mirrorHref: "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf",
-  },
 ] as const;
 
 const UNMIRRORED_EXTERNAL_SAMPLES = [
@@ -80,11 +75,29 @@ const INTERNAL_PDF_SAMPLES = [
 ] as const;
 
 test.describe("portfolio PDF mirrors", () => {
-  test("renders primary links and separate PDF mirror buttons for the 10 C3.ai, AWS, and EY GigNow samples without nested anchors", async ({
+  test("renders primary links and separate PDF mirror buttons for the 9 C3.ai and AWS samples without nested anchors", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/portfolio");
+
+    await expect(
+      page.getByRole("heading", { name: "Ernst and Young (GigNow)" })
+    ).toHaveCount(0);
+    await expect(
+      page.getByText(/first technical writer at GigNow/i)
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "What is EY GigNow?" })
+    ).toHaveCount(0);
+    await expect(
+      page.locator('a[href="/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf"]')
+    ).toHaveCount(0);
+    await expect(page.locator("main section h2")).toHaveText([
+      "C3.ai",
+      "AWS (Amazon S3)",
+      "Student Work",
+    ]);
 
     await expect(
       page.locator("header").getByRole("link", { name: "Portfolio", exact: true })
@@ -138,6 +151,26 @@ test.describe("portfolio PDF mirrors", () => {
       ).toBeGreaterThan(10_000);
       expect(body.subarray(0, 5).toString("ascii")).toBe("%PDF-");
     }
+
+    const removedEyMirror = await request.get(
+      "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf"
+    );
+    expect(removedEyMirror.status()).toBe(404);
+  });
+
+  test("lists only C3.ai and AWS for the portfolio PDF mirrors update on /updates", async ({
+    page,
+  }) => {
+    await page.goto("/updates");
+
+    const article = page.locator("article");
+    await expect(
+      article.getByText(
+        "Added archived PDF mirrors for the C3.ai and AWS writing samples on the portfolio page",
+        { exact: true }
+      )
+    ).toBeVisible();
+    await expect(article.getByText(/EY GigNow/i)).toHaveCount(0);
   });
 
   test("keeps unmirrored external samples and internal PDF samples without mirror links", async ({

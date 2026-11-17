@@ -74,17 +74,6 @@ const sections: {
     ],
   },
   {
-    company: "Ernst and Young (GigNow)",
-    intro: "I was the first technical writer at GigNow, a startup subsidiary that is part of EY. I authored and edited most of the Zendesk KB articles, and I wrote release notes content every 2 weeks.",
-    samples: [
-      {
-        title: "What is EY GigNow?",
-        href: "https://gignow.zendesk.com/hc/en-us/articles/360001055554-What-is-EY-GigNow",
-        mirrorHref: "/portfolio-mirrors/ey-gignow-what-is-ey-gignow.pdf",
-      },
-    ],
-  },
-  {
     company: "Student Work",
     intro: "Some Medium articles I wrote while I was exploring technical writing.",
     samples: [
