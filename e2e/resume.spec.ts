@@ -34,9 +34,12 @@ test("site updates lists the November 2026 resume update linking to /resume", as
   const novHeading = page.getByRole("heading", { level: 2, name: "November 2026" });
   await expect(novHeading).toBeVisible();
 
-  const firstBullet = novHeading.locator("+ ul > li").first();
-  await expect(firstBullet).toHaveText("Updated resume with YouTube experience");
-  const resumeLink = firstBullet.getByRole("link", { name: "resume" });
+  const resumeBullet = novHeading
+    .locator("+ ul > li")
+    .filter({ hasText: "Updated resume with YouTube experience" });
+  await expect(resumeBullet).toHaveCount(1);
+  await expect(resumeBullet).toHaveText("Updated resume with YouTube experience");
+  const resumeLink = resumeBullet.getByRole("link", { name: "resume" });
   await expect(resumeLink).toHaveAttribute("href", "/resume");
 
   await resumeLink.click();
